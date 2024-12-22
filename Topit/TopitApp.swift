@@ -18,6 +18,7 @@ var isMacOS13 = false
 var isMacOS12 = false
 var axPerm = false
 var scPerm = false
+var togglePinWindows = false
 
 @main
 struct TopitApp: App {
@@ -80,6 +81,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyDown(for: .selectWindow) { WindowHighlighter.shared.registerMouseMonitor() }
         KeyboardShortcuts.onKeyDown(for: .pinUnpin) { pnpUnderMouseWindow() }
         KeyboardShortcuts.onKeyDown(for: .pinUnpinTopmost) { pnpFrontmostWindow() }
+        KeyboardShortcuts.onKeyDown(for: .togglePinWindows) {
+            if togglePinWindows {
+                togglePinWindows = false
+                restoreFrontmostWindow()
+            } else {
+                togglePinWindows = true
+                minimizeFrontmostWindow()
+            }
+        }
         
         tips("Topit uses the accessibility permissions\nand screen recording permissions\nto control and capture your windows.".local, id: "topit.how-to-use.note")
         tips("macOS will prevent any notifications from appearing while Topit is running\nIt's not a bug or Topit's fault!".local, id: "topit.no-notifications.note")
@@ -175,6 +185,34 @@ func pnpFrontmostWindow() {
             closeMainWindow()
             createNewWindow(display: scDisplay, window: scWindow)
         }
+    }
+}
+
+func minimizeFrontmostWindow() {
+    let pinnedWindows = SCManager.pinnedWdinwows
+    for scWindow in pinnedWindows {
+        let windowID = scWindow.windowID
+        if let nsWindow = NSApp.windows.first(where: {
+               $0.title == "Topit Layer\(windowID)" || $0.title == "Topit Layer\(windowID)O"
+           }) {
+            nsWindow.orderOut(nil)
+        }
+        minimizeOriginalWindow(windowID)
+    }
+}
+
+func restoreFrontmostWindow() {
+    let pinnedWindows = SCManager.pinnedWdinwows
+    
+    print(pinnedWindows.count)
+    for scWindow in pinnedWindows {
+        let windowID = scWindow.windowID
+        if let nsWindow = NSApp.windows.first(where: {
+               $0.title == "Topit Layer\(windowID)" || $0.title == "Topit Layer\(windowID)O"
+           }) {
+            nsWindow.makeKeyAndOrderFront(nil)
+        }
+        restoreOriginalWindow(windowID)
     }
 }
 

@@ -37,6 +37,7 @@
 "Pin / Unpin Under-Mouse Window" = "將滑鼠所指的視窗置頂 / 解除置頂";
 "Pin / Unpin Frontmost Window" = "將最前面的視窗置頂 / 解除置頂";
 "Unpin All Pinned Windows" = "解除所有置頂視窗";
+"Toggle Minimized Pin Windows" = "切換置頂窗口最小化";
 "App Filter" = "App 過濾器";
 " Tips" = " 小貼士";
 "Don't remind me again" = "不再提醒";

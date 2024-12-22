@@ -157,6 +157,9 @@ struct HotkeyView: View {
                 SDivider()
                 SItem(label: "Unpin All Pinned Windows"){ KeyboardShortcuts.Recorder("", name: .unpinAll) }
             }
+            SGroupBox {
+                SItem(label: "Toggle Minimized Pin Windows") { KeyboardShortcuts.Recorder("", name: .togglePinWindows) }
+            }
         }
     }
 }
@@ -182,4 +185,5 @@ extension KeyboardShortcuts.Name {
     static let pinUnpin = Self("pinUnpin")
     static let pinUnpinTopmost = Self("pinTopmost")
     static let unpinAll = Self("unpinAll")
+    static let togglePinWindows = Self("togglePinWindows")
 }

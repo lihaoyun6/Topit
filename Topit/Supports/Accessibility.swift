@@ -8,6 +8,8 @@
 import SwiftUI
 import ScreenCaptureKit
 
+var minimizedAXWindows: [CGWindowID: AXUIElement] = [:]
+
 func getScreenWithMouse() -> NSScreen? {
     let mouseLocation = NSEvent.mouseLocation
     let screenWithMouse = NSScreen.screens.first(where: { NSMouseInRect(mouseLocation, $0.frame, false) })
@@ -304,6 +306,46 @@ func closeAXWindow(_ axWindow: AXUIElement?) -> Bool {
     if closeActionResult == .success { return true }
     print("Failed to close the window!")
     return false
+}
+
+/// 尝试将给定 `windowID` 的窗口最小化 (前提：有辅助功能权限，且应用支持 AXMinimized)
+func minimizeOriginalWindow(_ windowID: CGWindowID) {
+    // 1. 找到该 windowID 对应的进程 PID、然后拿到 AXUIElement
+    guard let axWindow = getAXWindow(windowID: windowID) else {
+        print("Failed to retrieve AXWindow for windowID \(windowID)")
+        return
+    }
+    minimizedAXWindows[windowID] = axWindow
+    // 2. 设置 AXMinimized = true
+    let result = AXUIElementSetAttributeValue(
+        axWindow,
+        kAXMinimizedAttribute as CFString,
+        kCFBooleanTrue
+    )
+    if result != .success {
+        print("Failed to minimize window \(windowID). Result: \(result.rawValue)")
+    } else {
+        print("Window \(windowID) minimized successfully.")
+    }
+}
+
+/// 还原窗口 (取消最小化)
+func restoreOriginalWindow(_ windowID: CGWindowID) {
+    // 1. 从字典拿到 AXWindow 引用
+    guard let axWindow = minimizedAXWindows[windowID] else {
+        print("We don't have AXUIElement cached for windowID \(windowID).")
+        return
+    }
+    let result = AXUIElementSetAttributeValue(
+        axWindow,
+        kAXMinimizedAttribute as CFString,
+        kCFBooleanFalse
+    )
+    if result != .success {
+        print("Failed to restore window \(windowID). Result: \(result.rawValue)")
+    } else {
+        print("Window \(windowID) restored successfully.")
+    }
 }
 
 // AXValue 扩展，便于设置值
