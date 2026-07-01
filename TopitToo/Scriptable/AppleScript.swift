@@ -1,6 +1,6 @@
 //
 //  AppleScript.swift
-//  Topit
+//  TopitToo
 //
 //  Created by apple on 2024/12/1.
 //
@@ -31,7 +31,7 @@ class pnpMouse: NSScriptCommand {
 class unpinAllWindows: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         DispatchQueue.main.async {
-            for layer in NSApp.windows.filter({$0.title.hasPrefix("Topit Layer")}) { layer.close() }
+            for layer in NSApp.windows.filter({$0.title.hasPrefix("TopitToo Layer")}) { layer.close() }
             AvoidManager.shared.activedFrame = .zero
         }
     }

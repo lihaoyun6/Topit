@@ -12,26 +12,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18221D732CEA07BA009F773F /* Topit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Topit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18221D732CEA07BA009F773F /* TopitToo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TopitToo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		18BC29862CEC15E100FF22A8 /* Exceptions for "Topit" folder in "Topit" target */ = {
+		18BC29862CEC15E100FF22A8 /* Exceptions for "TopitToo" folder in "TopitToo" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 18221D722CEA07BA009F773F /* Topit */;
+			target = 18221D722CEA07BA009F773F /* TopitToo */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		18221D752CEA07BA009F773F /* Topit */ = {
+		18221D752CEA07BA009F773F /* TopitToo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				18BC29862CEC15E100FF22A8 /* Exceptions for "Topit" folder in "Topit" target */,
+				18BC29862CEC15E100FF22A8 /* Exceptions for "TopitToo" folder in "TopitToo" target */,
 			);
-			path = Topit;
+			path = TopitToo;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -52,7 +52,7 @@
 		18221D6A2CEA07BA009F773F = {
 			isa = PBXGroup;
 			children = (
-				18221D752CEA07BA009F773F /* Topit */,
+				18221D752CEA07BA009F773F /* TopitToo */,
 				18221D742CEA07BA009F773F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -60,7 +60,7 @@
 		18221D742CEA07BA009F773F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				18221D732CEA07BA009F773F /* Topit.app */,
+				18221D732CEA07BA009F773F /* TopitToo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -68,9 +68,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		18221D722CEA07BA009F773F /* Topit */ = {
+		18221D722CEA07BA009F773F /* TopitToo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 18221D822CEA07BB009F773F /* Build configuration list for PBXNativeTarget "Topit" */;
+			buildConfigurationList = 18221D822CEA07BB009F773F /* Build configuration list for PBXNativeTarget "TopitToo" */;
 			buildPhases = (
 				18221D6F2CEA07BA009F773F /* Sources */,
 				18221D702CEA07BA009F773F /* Frameworks */,
@@ -81,15 +81,15 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				18221D752CEA07BA009F773F /* Topit */,
+				18221D752CEA07BA009F773F /* TopitToo */,
 			);
-			name = Topit;
+			name = TopitToo;
 			packageProductDependencies = (
 				18BC298A2CEC21B100FF22A8 /* Sparkle */,
 				18D6C25B2CEF5FA00026BFB3 /* KeyboardShortcuts */,
 			);
-			productName = Topit;
-			productReference = 18221D732CEA07BA009F773F /* Topit.app */;
+			productName = TopitToo;
+			productReference = 18221D732CEA07BA009F773F /* TopitToo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -107,7 +107,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 18221D6E2CEA07BA009F773F /* Build configuration list for PBXProject "Topit" */;
+			buildConfigurationList = 18221D6E2CEA07BA009F773F /* Build configuration list for PBXProject "TopitToo" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -127,7 +127,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				18221D722CEA07BA009F773F /* Topit */,
+				18221D722CEA07BA009F773F /* TopitToo */,
 			);
 		};
 /* End PBXProject section */
@@ -276,16 +276,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Topit/Topit.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = TopitToo/TopitToo.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 15;
-				DEVELOPMENT_ASSET_PATHS = "\"Topit/Preview Content\"";
-				DEVELOPMENT_TEAM = L4T783637F;
+				DEVELOPMENT_ASSET_PATHS = "\"TopitToo/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Topit/Info.plist;
+				INFOPLIST_FILE = TopitToo/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 lihaoyun6. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -294,7 +295,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 0.1.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lihaoyun6.Topit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lihaoyun6.TopitToo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -306,16 +307,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Topit/Topit.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = TopitToo/TopitToo.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 15;
-				DEVELOPMENT_ASSET_PATHS = "\"Topit/Preview Content\"";
-				DEVELOPMENT_TEAM = L4T783637F;
+				DEVELOPMENT_ASSET_PATHS = "\"TopitToo/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Topit/Info.plist;
+				INFOPLIST_FILE = TopitToo/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 lihaoyun6. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -324,7 +326,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 0.1.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lihaoyun6.Topit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lihaoyun6.TopitToo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -334,7 +336,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		18221D6E2CEA07BA009F773F /* Build configuration list for PBXProject "Topit" */ = {
+		18221D6E2CEA07BA009F773F /* Build configuration list for PBXProject "TopitToo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18221D802CEA07BB009F773F /* Debug */,
@@ -343,7 +345,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		18221D822CEA07BB009F773F /* Build configuration list for PBXNativeTarget "Topit" */ = {
+		18221D822CEA07BB009F773F /* Build configuration list for PBXNativeTarget "TopitToo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18221D832CEA07BB009F773F /* Debug */,

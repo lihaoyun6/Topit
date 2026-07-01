@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>Topit</title>
+        <title>TopitToo</title>
         <item>
             <title>v0.1.5</title>
             <pubDate>Sun, 01 Dec 2024 23:09:26 +0800</pubDate>
@@ -15,15 +15,15 @@
                 <li>改进了自动闪避功能, 进一步提升使用体验.</li>
                 </ul><ul>
                 <li>Fixed: Some hotkeys didn't work properly.</li>
-                <li>Added: AppleScript support, you can call Topit through scripts.</li>
+                <li>Added: AppleScript support, you can call TopitToo through scripts.</li>
                 <li>Improved auto-ducking to make it work better.</li>
-                </ul><img src="https://github.com/lihaoyun6/Topit/raw/main/img/donate.png" width="260"/>
+                </ul><img src="https://github.com/lihaoyun6/TopitToo/raw/main/img/donate.png" width="260"/>
             ]]></description>
-            <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.5/Topit_v0.1.5.dmg" length="2342454" type="application/octet-stream" sparkle:edSignature="f63/c1aLlNivGtTAKYMlS4L7RlYOB6JX9JMwfLV+nNiSBxegKbQObJ3Gi6O/co50UHPOj93H9Pxd3UH0vL4BCg=="/>
+            <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.5/TopitToo_v0.1.5.dmg" length="2342454" type="application/octet-stream" sparkle:edSignature="f63/c1aLlNivGtTAKYMlS4L7RlYOB6JX9JMwfLV+nNiSBxegKbQObJ3Gi6O/co50UHPOj93H9Pxd3UH0vL4BCg=="/>
             <sparkle:deltas>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.5/Update15-14.delta" sparkle:deltaFrom="14" length="212010" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="ubNmNYVXfCEwbdTW+lHDpzLxQQGjKlqaPjJrVL7V7Sg9VEbTWksk8pEOPuawspiiOvwB/ZEB7SNFzomrUH93Ag=="/>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.5/Update15-13.delta" sparkle:deltaFrom="13" length="350374" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="cbTmicogl8yrlopypz74PxsrK2gx5gfsQA6gsefQnw8R+Hf4OdHbQ0NFiWJaLCBfbfZL0Gv4rUU30zqGCkfmDQ=="/>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.5/Update15-12.delta" sparkle:deltaFrom="12" length="359874" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="8pLG7OOLfhb1UrEHphsONF0zwvCuJeT0Nzb3y8cxjefKHEMKbWn6oWoZ8FtcSVSxRly5UC9GQYtsLtgclKlYAg=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.5/Update15-14.delta" sparkle:deltaFrom="14" length="212010" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="ubNmNYVXfCEwbdTW+lHDpzLxQQGjKlqaPjJrVL7V7Sg9VEbTWksk8pEOPuawspiiOvwB/ZEB7SNFzomrUH93Ag=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.5/Update15-13.delta" sparkle:deltaFrom="13" length="350374" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="cbTmicogl8yrlopypz74PxsrK2gx5gfsQA6gsefQnw8R+Hf4OdHbQ0NFiWJaLCBfbfZL0Gv4rUU30zqGCkfmDQ=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.5/Update15-12.delta" sparkle:deltaFrom="12" length="359874" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="8pLG7OOLfhb1UrEHphsONF0zwvCuJeT0Nzb3y8cxjefKHEMKbWn6oWoZ8FtcSVSxRly5UC9GQYtsLtgclKlYAg=="/>
             </sparkle:deltas>
         </item>
         <item>
@@ -41,13 +41,13 @@
                 <li>Supports adjusting the opacity of pinned windows.</li>
                 <li>Added "auto-ducking" to fix wrong window order when pinned windows overlap.</li>
                 <li>Added new hotkey and fixed other known issues.</li>
-                </ul><img src="https://github.com/lihaoyun6/Topit/raw/main/img/donate.png" width="250"/>
+                </ul><img src="https://github.com/lihaoyun6/TopitToo/raw/main/img/donate.png" width="250"/>
             ]]></description>
-            <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.4/Topit_v0.1.4.dmg" length="2322384" type="application/octet-stream" sparkle:edSignature="RnLUHhdGftF9YVDAVZ1ATJ2IeO6pKJXZm5m4HxvSGLn9N0MWReS063o/JNABVaVABSYS7XZz91bVEt5ulECYAA=="/>
+            <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.4/TopitToo_v0.1.4.dmg" length="2322384" type="application/octet-stream" sparkle:edSignature="RnLUHhdGftF9YVDAVZ1ATJ2IeO6pKJXZm5m4HxvSGLn9N0MWReS063o/JNABVaVABSYS7XZz91bVEt5ulECYAA=="/>
             <sparkle:deltas>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.4/Update14-13.delta" sparkle:deltaFrom="13" length="323726" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="AXOYcqpG7tHJCntAz+suuCcR/CRmi0JCSN6lzyCYwyRpF/DhbSirba1cMo0ytcOqI6dlAwNqmRtejrkKTd63DA=="/>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.4/Update14-12.delta" sparkle:deltaFrom="12" length="333666" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="XLMR5wECPu46QgrmktGdEiE1mN8xHM3C6fyrHJ5UycJTyLIPf+zKU7aQkcHcrfYuSEDHbQ4K/UKXZlJxpT/WBw=="/>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.4/Update14-11.delta" sparkle:deltaFrom="11" length="399154" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="HxXbrCBLbwgY8qqLe3O3jDPn9o5TIxyFKNR8ur+2nW7mgsNAEp4bhdduKqmpDY+Em0DAiDF3F3ltb2TiCxvEBQ=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.4/Update14-13.delta" sparkle:deltaFrom="13" length="323726" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="AXOYcqpG7tHJCntAz+suuCcR/CRmi0JCSN6lzyCYwyRpF/DhbSirba1cMo0ytcOqI6dlAwNqmRtejrkKTd63DA=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.4/Update14-12.delta" sparkle:deltaFrom="12" length="333666" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="XLMR5wECPu46QgrmktGdEiE1mN8xHM3C6fyrHJ5UycJTyLIPf+zKU7aQkcHcrfYuSEDHbQ4K/UKXZlJxpT/WBw=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.4/Update14-11.delta" sparkle:deltaFrom="11" length="399154" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="HxXbrCBLbwgY8qqLe3O3jDPn9o5TIxyFKNR8ur+2nW7mgsNAEp4bhdduKqmpDY+Em0DAiDF3F3ltb2TiCxvEBQ=="/>
             </sparkle:deltas>
         </item>
         <item>
@@ -65,13 +65,13 @@
                 <li>Fixed: Some hotkeys don't work properly</li>
                 <li>You can activate pinned windows using "Left Click" instead of mouseover</li>
                 <li>Optimize performance and reduce memory usage</li>
-                </ul><img src="https://github.com/lihaoyun6/Topit/raw/main/img/donate.png" width="250"/>
+                </ul><img src="https://github.com/lihaoyun6/TopitToo/raw/main/img/donate.png" width="250"/>
             ]]></description>
-            <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.3/Topit_v0.1.3.dmg" length="2258005" type="application/octet-stream" sparkle:edSignature="jBAGnu1kfgFxjM4IcXz9bP/y8AGZufrDKRX5wtevhR+MD/Kpn7XIG6tN2WKgxfbwOrgSTOwiuiVzCg+PnDRDCA=="/>
+            <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.3/TopitToo_v0.1.3.dmg" length="2258005" type="application/octet-stream" sparkle:edSignature="jBAGnu1kfgFxjM4IcXz9bP/y8AGZufrDKRX5wtevhR+MD/Kpn7XIG6tN2WKgxfbwOrgSTOwiuiVzCg+PnDRDCA=="/>
             <sparkle:deltas>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.3/Update13-12.delta" sparkle:deltaFrom="12" length="172994" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="DxwFzqqp4Vomnb2SYEjimVRyXiznfJbEzAebEdH77a9cBYA7mpRigj7GaKX5289GTANmnzYw5/mDwIkHQ8u4AA=="/>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.3/Update13-11.delta" sparkle:deltaFrom="11" length="339566" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="YCQFNrtCDJH15dLuHWDSAm9PKnRoMrMsTTypjyoEnZHOUZYSpYs/kA1nd2r/VwS545etDGlp1Aa3aPrafITODA=="/>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.3/Update13-10.delta" sparkle:deltaFrom="10" length="634430" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="X4skV9CleyIjXn5aimubnCa/Qr7iJPkhi0Vk68VrQ/YZgJmz+FelVK2/oj4VYeAynTkwR11OXsmNAAO9HDWuAg=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.3/Update13-12.delta" sparkle:deltaFrom="12" length="172994" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="DxwFzqqp4Vomnb2SYEjimVRyXiznfJbEzAebEdH77a9cBYA7mpRigj7GaKX5289GTANmnzYw5/mDwIkHQ8u4AA=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.3/Update13-11.delta" sparkle:deltaFrom="11" length="339566" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="YCQFNrtCDJH15dLuHWDSAm9PKnRoMrMsTTypjyoEnZHOUZYSpYs/kA1nd2r/VwS545etDGlp1Aa3aPrafITODA=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.3/Update13-10.delta" sparkle:deltaFrom="10" length="634430" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="X4skV9CleyIjXn5aimubnCa/Qr7iJPkhi0Vk68VrQ/YZgJmz+FelVK2/oj4VYeAynTkwR11OXsmNAAO9HDWuAg=="/>
             </sparkle:deltas>
         </item>
         <item>
@@ -91,12 +91,12 @@
                 <li>Supports "Pause", which allows a window to be temporarily unpinned.</li>
                 <li>Capture will stop when interacting with the window to save power.</li>
                 <li>Improved the window control buttons and added more hotkeys.</li>
-                </ul><img src="https://github.com/lihaoyun6/Topit/raw/main/img/donate.png" width="250"/>
+                </ul><img src="https://github.com/lihaoyun6/TopitToo/raw/main/img/donate.png" width="250"/>
             ]]></description>
-            <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.2/Topit_v0.1.2.dmg" length="2249683" type="application/octet-stream" sparkle:edSignature="oVzYAJMGmAuJqBe1KEUuTMKVBgXQ7JlyRb6lZaHYPgkN5iU2aWVqyrJ0x/SeiI/mXRIfodXfqQxBmMNThh25Aw=="/>
+            <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.2/TopitToo_v0.1.2.dmg" length="2249683" type="application/octet-stream" sparkle:edSignature="oVzYAJMGmAuJqBe1KEUuTMKVBgXQ7JlyRb6lZaHYPgkN5iU2aWVqyrJ0x/SeiI/mXRIfodXfqQxBmMNThh25Aw=="/>
             <sparkle:deltas>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.2/Update12-11.delta" sparkle:deltaFrom="11" length="320986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="z9Tc0psCMzrta0Tr/KkZJHkrjb8UidMiLLzruq2mGGNH262M63EUzkmfCmbN4sYIGBWmY/DU2zKEoWqzJOEyAQ=="/>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.2/Update12-10.delta" sparkle:deltaFrom="10" length="629870" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="LEQ6OhS/1hhZKw+20Vgt2ucIIcvTEBtZAWKIm314FeseL5aO2H10MLDrPxHmn+2oxdvC1tHmFv4FH97Sh0zkDg=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.2/Update12-11.delta" sparkle:deltaFrom="11" length="320986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="z9Tc0psCMzrta0Tr/KkZJHkrjb8UidMiLLzruq2mGGNH262M63EUzkmfCmbN4sYIGBWmY/DU2zKEoWqzJOEyAQ=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.2/Update12-10.delta" sparkle:deltaFrom="10" length="629870" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="LEQ6OhS/1hhZKw+20Vgt2ucIIcvTEBtZAWKIm314FeseL5aO2H10MLDrPxHmn+2oxdvC1tHmFv4FH97Sh0zkDg=="/>
             </sparkle:deltas>
         </item>
         <item>
@@ -116,11 +116,11 @@
                 <li>Supports displaying or hiding Menu Bar / Dock icon.</li>
                 <li>Supports using hotkey to quickly pin / unpin any window.</li>
                 <li>Supports configuration of more window properties and App filter.</li>
-                </ul><img src="https://github.com/lihaoyun6/Topit/raw/main/img/donate.png" width="250"/>
+                </ul><img src="https://github.com/lihaoyun6/TopitToo/raw/main/img/donate.png" width="250"/>
             ]]></description>
-            <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.1/Topit_v0.1.1.dmg" length="2133191" type="application/octet-stream" sparkle:edSignature="bvdle+kHltpxw51bX/c9uy8lKcJUioi6lQDgEVOFAaLenJSQ5LwTNC+Kr9nP+7pM1/C7nSnCCr/nmKmmNWTwDQ=="/>
+            <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.1/TopitToo_v0.1.1.dmg" length="2133191" type="application/octet-stream" sparkle:edSignature="bvdle+kHltpxw51bX/c9uy8lKcJUioi6lQDgEVOFAaLenJSQ5LwTNC+Kr9nP+7pM1/C7nSnCCr/nmKmmNWTwDQ=="/>
             <sparkle:deltas>
-                <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.1/Update11-10.delta" sparkle:deltaFrom="10" length="532614" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="kYynRwMxwcgN4HTaVMIuDNvIckwuLdP0bkLOn6HcCbJS1JK4ASjzOrfN66jDvsbmOy94cDZswp1cy3R4ZumvAw=="/>
+                <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.1/Update11-10.delta" sparkle:deltaFrom="10" length="532614" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864752" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="kYynRwMxwcgN4HTaVMIuDNvIckwuLdP0bkLOn6HcCbJS1JK4ASjzOrfN66jDvsbmOy94cDZswp1cy3R4ZumvAw=="/>
             </sparkle:deltas>
         </item>
         <item>
@@ -133,7 +133,7 @@
                 <style>ul{margin-top: 0;margin-bottom: 7;padding-left: 18;}</style><ul>
                 <li>内测用户可以通过本次更新升级到正式版.</li></ul>
             ]]></description>
-            <enclosure url="https://github.com/lihaoyun6/Topit/releases/download/0.1.0/Topit_v0.1.0.dmg" length="1690579" type="application/octet-stream" sparkle:edSignature="25rfEZrilOyyVe4IpdJvVVZX9DZ9hY4SKouaCBrJ/q8AXxR+etsJTCPd6wH/x7ndI35LJeYbL1wjy2ClJPocDQ=="/>
+            <enclosure url="https://github.com/lihaoyun6/TopitToo/releases/download/0.1.0/TopitToo_v0.1.0.dmg" length="1690579" type="application/octet-stream" sparkle:edSignature="25rfEZrilOyyVe4IpdJvVVZX9DZ9hY4SKouaCBrJ/q8AXxR+etsJTCPd6wH/x7ndI35LJeYbL1wjy2ClJPocDQ=="/>
         </item>
     </channel>
 </rss>

@@ -1,6 +1,6 @@
 //
 //  Accessibility.swift
-//  Topit
+//  TopitToo
 //
 //  Created by apple on 2024/11/18.
 //
@@ -46,7 +46,7 @@ func getAppIcon(_ app: SCRunningApplication) -> NSImage? {
 }
 
 func createNewWindow(display: SCDisplay, window: SCWindow, opacity: Double? = nil) {
-    let title = "Topit Layer\(window.windowID)\(opacity == nil ? "" : "O")"
+    let title = "TopitToo Layer\(window.windowID)\(opacity == nil ? "" : "O")"
     var panel: NSWindow!
     var contentView: NSView!
     
@@ -305,6 +305,65 @@ func closeAXWindow(_ axWindow: AXUIElement?) -> Bool {
     print("Failed to close the window!")
     return false
 }
+
+/// Get the close button center position in overlay-local coordinates (top-left origin, y-down).
+/// Returns nil if AXUIElement cannot access the close button (e.g. Electron/Java apps).
+func getCloseButtonLocalCenter(windowFrame: CGRect, mainScreenHeight: CGFloat, axWindow: AXUIElement?) -> CGPoint? {
+    guard let axWindow = axWindow else {
+        print("[Topit][AX DEBUG] axWindow is nil")
+        return nil
+    }
+
+    // Debug: get AXWindow's own position to understand coordinate system
+    var axWindowPosValue: CFTypeRef?
+    var axWindowPos = CGPoint.zero
+    if AXUIElementCopyAttributeValue(axWindow, kAXPositionAttribute as CFString, &axWindowPosValue) == .success {
+        let pos = axWindowPosValue as! AXValue
+        AXValueGetValue(pos, .cgPoint, &axWindowPos)
+        print("[Topit][AX DEBUG] AXWindow position=(\(axWindowPos.x), \(axWindowPos.y))")
+    }
+
+    var closeButtonRef: CFTypeRef?
+    let result = AXUIElementCopyAttributeValue(axWindow, kAXCloseButtonAttribute as CFString, &closeButtonRef)
+    guard result == .success, let closeButton = closeButtonRef else {
+        print("[Topit] AX close button not available (AXError=\(result.rawValue)), using estimated position")
+        // Fallback for Electron/custom-chrome apps: estimate standard macOS traffic light position
+        // Close button center ~20pt from window top-left in overlay-local coords
+        return CGPoint(x: 20, y: 20)
+    }
+
+    let closeButtonElement = closeButton as! AXUIElement
+
+    var positionValue: CFTypeRef?
+    var sizeValue: CFTypeRef?
+    var axPosition = CGPoint.zero
+    var axSize = CGSize.zero
+
+    let posResult = AXUIElementCopyAttributeValue(closeButtonElement, kAXPositionAttribute as CFString, &positionValue)
+    let sizeResult = AXUIElementCopyAttributeValue(closeButtonElement, kAXSizeAttribute as CFString, &sizeValue)
+    if posResult != .success || sizeResult != .success {
+        print("[Topit][AX DEBUG] Close button position/size failed, posResult=\(posResult.rawValue), sizeResult=\(sizeResult.rawValue)")
+        return nil
+    }
+
+    let position = positionValue as! AXValue
+    AXValueGetValue(position, .cgPoint, &axPosition)
+    let size = sizeValue as! AXValue
+    AXValueGetValue(size, .cgSize, &axSize)
+
+    // AX coords use screen top-left origin (y-down), same as NSWindow coords
+    // Overlay-local: overlay top-left origin, y-down
+    // Overlay frame == windowFrame (CGWindow)
+    let buttonCenterX = axPosition.x - windowFrame.origin.x + axSize.width / 2
+    // AX position is screen top-left origin (y-down), same as NSWindow coords
+    // Convert to overlay-local (top-left origin, y-down): subtract window top-left
+    let buttonCenterY = axPosition.y - windowFrame.origin.y + axSize.height / 2
+
+
+    print("[Topit] AX close button detected — axPosition=(\(axPosition.x), \(axPosition.y)), axSize=(\(axSize.width), \(axSize.height)), overlay-local=(\(buttonCenterX), \(buttonCenterY)), windowFrame=origin=(\(windowFrame.origin.x), \(windowFrame.origin.y)) size=(\(windowFrame.width), \(windowFrame.height)) mainScreenHeight=\(mainScreenHeight)")
+    return CGPoint(x: buttonCenterX, y: buttonCenterY)
+}
+
 
 // AXValue 扩展，便于设置值
 extension AXValue {

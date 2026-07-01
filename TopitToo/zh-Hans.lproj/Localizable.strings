@@ -1,6 +1,6 @@
 /* 
   Localizable.strings
-  Topit
+  TopitToo
 
   Created by apple on 2024/11/19.
   
@@ -12,16 +12,16 @@
 "Automatically download updates" = "自动下载程序更新";
 "Show Windows with No Title" = "显示无标题窗口";
 "Refresh" = "刷新";
-" Topit! " = "立即置顶";
+" TopitToo! " = "立即置顶";
 "OK" = "好";
 "Close" = "关闭窗口";
 "Unpin" = "解除置顶";
 "Quit" = "退出";
-"Topit Settings" = "Topit 设置";
+"TopitToo Settings" = "TopitToo 设置";
 "General" = "一般设置";
 "Launch at Login" = "登录时启动";
-"Show Topit on Dock" = "在程序坞中显示 Topit";
-"Show Topit on Menu Bar" = "在菜单栏上显示 Topit";
+"Show TopitToo on Dock" = "在程序坞中显示 TopitToo";
+"Show TopitToo on Menu Bar" = "在菜单栏上显示 TopitToo";
 "Windows" = "窗口设置";
 "Activate Pinned Window on" = "置顶窗口激活方式";
 "Cursor Hover" = "鼠标悬停";
@@ -40,22 +40,22 @@
 "App Filter" = "App 过滤器";
 " Tips" = " 小贴士";
 "Don't remind me again" = "不再提醒";
-"Topit uses the accessibility permissions\nand screen recording permissions\nto control and capture your windows." = "Topit 利用屏幕录制权限和辅助功能权限\n来捕获并控制窗口, 请务必同意授权.";
-"macOS will prevent any notifications from appearing while Topit is running\nIt's not a bug or Topit's fault!" = "当使用 Topit 对任意窗口进行置顶时\nmacOS 会暂停弹出来自任何应用的通知\n此限制来自 macOS 本身, 不是 Topit 的错";
+"TopitToo uses the accessibility permissions\nand screen recording permissions\nto control and capture your windows." = "TopitToo 利用屏幕录制权限和辅助功能权限\n来捕获并控制窗口, 请务必同意授权.";
+"macOS will prevent any notifications from appearing while TopitToo is running\nIt's not a bug or TopitToo's fault!" = "当使用 TopitToo 对任意窗口进行置顶时\nmacOS 会暂停弹出来自任何应用的通知\n此限制来自 macOS 本身, 不是 TopitToo 的错";
 "Sorry" = "很抱歉";
 "You can only pin one window on macOS Monterey." = "在 macOS 12 系统上只支持置顶一个窗口.";
 "OK" = "好";
 "screen recording permissions" = "屏幕录制权限";
 "accessibility permissions" = "辅助功能权限";
 "accessibility and screen recording permissions" = "辅助功能和屏幕录制权限";
-"You haven't enabled %@ for Topit!\nPlease restart Topit after enabling it." = "尚未为 Topit 启用%@\n请在授权后重新启动 Topit";
+"You haven't enabled %@ for TopitToo!\nPlease restart TopitToo after enabling it." = "尚未为 TopitToo 启用%@\n请在授权后重新启动 TopitToo";
 "Permission Error" = "权限错误";
 "Pin a Window" = "置顶某个窗口";
 "Window Selector" = "窗口选择器";
 "Unpin all Windows" = "解除所有置顶";
-"About Topit" = "关于 Topit";
+"About TopitToo" = "关于 TopitToo";
 "Settings…" = "设置…";
-"Quit Topit" = "退出 Topit";
+"Quit TopitToo" = "退出 TopitToo";
 "Error" = "错误";
 "This window is not available!" = "此窗口目前不可用!";
 "Pause" = "暂停置顶";
@@ -75,5 +75,5 @@
 "Opacity" = "不透明度";
 "This window is in translucent mode.\nPlease don't resize it in this mode!\nIf you need to do this, pause it first." = "此窗口正处于 \"半透明置顶\" 模式\n请勿在当前模式下缩放此窗口!\n如需缩放, 请先暂停其置顶状态";
 "Ducking Between Pinned Windows" = "在多个窗口间自动闪避";
-"By enabling this, Topit will hide other pinned windows that overlap with the currently active window." = "启用此功能后, Topit 会自动隐藏与当前激活窗口有重叠区域的其他置顶窗口.";
+"By enabling this, TopitToo will hide other pinned windows that overlap with the currently active window." = "启用此功能后, TopitToo 会自动隐藏与当前激活窗口有重叠区域的其他置顶窗口.";
 "Add Border for Translucent Window" = "为半透明窗口添加边框";

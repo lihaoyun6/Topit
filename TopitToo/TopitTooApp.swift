@@ -1,6 +1,6 @@
 //
-//  TopitApp.swift
-//  Topit
+//  TopitTooApp.swift
+//  TopitToo
 //
 //  Created by apple on 2024/11/17.
 //
@@ -20,7 +20,7 @@ var axPerm = false
 var scPerm = false
 
 @main
-struct TopitApp: App {
+struct TopitTooApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
@@ -71,7 +71,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(withTitle: "Settings…".local, action: #selector(settings), keyEquivalent: ",")
         menu.addItem(withTitle: "Check for Updates…".local, action: #selector(checkForUpdates), keyEquivalent: "")
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(withTitle: "Quit Topit".local, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(withTitle: "Quit TopitToo".local, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         statusBarItem.menu = menu
         statusBarItem.isVisible = showMenubar
         
@@ -81,8 +81,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyDown(for: .pinUnpin) { pnpUnderMouseWindow() }
         KeyboardShortcuts.onKeyDown(for: .pinUnpinTopmost) { pnpFrontmostWindow() }
         
-        tips("Topit uses the accessibility permissions\nand screen recording permissions\nto control and capture your windows.".local, id: "topit.how-to-use.note")
-        tips("macOS will prevent any notifications from appearing while Topit is running\nIt's not a bug or Topit's fault!".local, id: "topit.no-notifications.note")
+        tips("TopitToo uses the accessibility permissions\nand screen recording permissions\nto control and capture your windows.".local, id: "topit.how-to-use.note")
+        tips("macOS will prevent any notifications from appearing while TopitToo is running\nIt's not a bug or TopitToo's fault!".local, id: "topit.no-notifications.note")
         scPerm = SCManager.updateAvailableContentSync() != nil
         axPerm = AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as NSDictionary)
     }
@@ -92,11 +92,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
-        if NSApp.windows.first(where: { $0.title == "Topit" })?.isVisible != true {
+        if NSApp.windows.first(where: { $0.title == "TopitToo" })?.isVisible != true {
             axPerm = AXIsProcessTrusted()
             let mainPanel = NSWindow(contentRect: .zero, styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
             if axPerm && scPerm { mainPanel.level = .floating }
-            mainPanel.title = "Topit"
+            mainPanel.title = "TopitToo"
             mainPanel.titlebarSeparatorStyle = .none
             mainPanel.titlebarAppearsTransparent = true
             mainPanel.isMovableByWindowBackground = true
@@ -126,7 +126,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func unPinAll() {
         DispatchQueue.main.async {
-            for layer in NSApp.windows.filter({$0.title.hasPrefix("Topit Layer")}) { layer.close() }
+            for layer in NSApp.windows.filter({$0.title.hasPrefix("TopitToo Layer")}) { layer.close() }
             AvoidManager.shared.activedFrame = .zero
         }
     }
@@ -153,8 +153,8 @@ func pnpUnderMouseWindow() {
        let scWindow = getSCWindowWithID(windowID, noFilter: true), let scDisplay = getSCDisplayWithMouse() {
         if SCManager.pinnedWdinwows.contains(scWindow) {
             for w in NSApp.windows.filter({
-                $0.title == "Topit Layer\(windowID)"
-                || $0.title == "Topit Layer\(windowID)O"
+                $0.title == "TopitToo Layer\(windowID)"
+                || $0.title == "TopitToo Layer\(windowID)O"
             }) { w.close() }
         } else {
             closeMainWindow()
@@ -168,8 +168,8 @@ func pnpFrontmostWindow() {
         let windowID = scWindow.windowID
         if SCManager.pinnedWdinwows.contains(scWindow) {
             for w in NSApp.windows.filter({
-                $0.title == "Topit Layer\(windowID)"
-                || $0.title == "Topit Layer\(windowID)O"
+                $0.title == "TopitToo Layer\(windowID)"
+                || $0.title == "TopitToo Layer\(windowID)O"
             }) { w.close() }
         } else {
             closeMainWindow()
@@ -179,7 +179,7 @@ func pnpFrontmostWindow() {
 }
 
 func closeMainWindow() {
-    NSApp.windows.first(where: { $0.title == "Topit" })?.close()
+    NSApp.windows.first(where: { $0.title == "TopitToo" })?.close()
 }
 
 func openAboutPanel() {

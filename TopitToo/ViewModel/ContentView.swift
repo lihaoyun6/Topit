@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Topit
+//  TopitToo
 //
 //  Created by apple on 2024/11/17.
 //
@@ -59,7 +59,7 @@ struct ContentView: View {
                             }
                         }
                     }, label: {
-                        Text(" Topit! ")
+                        Text(" TopitToo! ")
                             .padding(.horizontal, 6)
                             .padding(.vertical, 3)
                             .foregroundStyle(.white)
@@ -223,7 +223,7 @@ struct ContentView: View {
                         }
                     }
                 }, label: {
-                    Text(" Topit! ")
+                    Text(" TopitToo! ")
                         .padding(.horizontal, 6)
                         .padding(.vertical, 3)
                         .foregroundStyle(.white)

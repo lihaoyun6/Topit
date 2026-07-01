@@ -1,6 +1,6 @@
 //
 //  ScreenCaptureManager.swift
-//  Topit
+//  TopitToo
 //
 //  Created by apple on 2024/11/17.
 //
@@ -145,7 +145,7 @@ class ScreenCaptureManager: NSObject, ObservableObject, SCStreamDelegate, SCStre
 class SCManager {
     static var pinnedWdinwows = [SCWindow]()
     static var availableContent: SCShareableContent?
-    static private let excludedApps = ["", "com.apple.dock", "com.apple.screencaptureui", "com.apple.controlcenter", "com.apple.notificationcenterui", "com.apple.systemuiserver", "com.apple.WindowManager", "dev.mnpn.Azayaka", "com.gaosun.eul", "com.pointum.hazeover", "net.matthewpalmer.Vanilla", "com.dwarvesv.minimalbar", "com.bjango.istatmenus.status", "com.macpaw.CleanMyMac4", "com.lihaoyun6.Topit"]
+    static private let excludedApps = ["", "com.apple.dock", "com.apple.screencaptureui", "com.apple.controlcenter", "com.apple.notificationcenterui", "com.apple.systemuiserver", "com.apple.WindowManager", "dev.mnpn.Azayaka", "com.gaosun.eul", "com.pointum.hazeover", "net.matthewpalmer.Vanilla", "com.dwarvesv.minimalbar", "com.bjango.istatmenus.status", "com.macpaw.CleanMyMac4", "com.lihaoyun6.TopitToo"]
     
     static func updateAvailableContentSync() -> SCShareableContent? {
         let semaphore = DispatchSemaphore(value: 0)

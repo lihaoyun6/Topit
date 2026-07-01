@@ -5,6 +5,10 @@
 ## User settings
 xcuserdata/
 
+## Local engineering files
+docs/
+.superpowers/
+
 ## Obj-C/Swift specific
 *.hmap
 

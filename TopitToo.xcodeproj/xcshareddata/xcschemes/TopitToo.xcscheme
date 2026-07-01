@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "18221D722CEA07BA009F773F"
-               BuildableName = "Topit.app"
-               BlueprintName = "Topit"
-               ReferencedContainer = "container:Topit.xcodeproj">
+               BuildableName = "TopitToo.app"
+               BlueprintName = "TopitToo"
+               ReferencedContainer = "container:TopitToo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "18221D722CEA07BA009F773F"
-            BuildableName = "Topit.app"
-            BlueprintName = "Topit"
-            ReferencedContainer = "container:Topit.xcodeproj">
+            BuildableName = "TopitToo.app"
+            BlueprintName = "TopitToo"
+            ReferencedContainer = "container:TopitToo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "18221D722CEA07BA009F773F"
-            BuildableName = "Topit.app"
-            BlueprintName = "Topit"
-            ReferencedContainer = "container:Topit.xcodeproj">
+            BuildableName = "TopitToo.app"
+            BlueprintName = "TopitToo"
+            ReferencedContainer = "container:TopitToo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
