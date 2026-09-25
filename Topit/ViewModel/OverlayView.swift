@@ -172,13 +172,12 @@ struct OverlayView: View {
                                 } else {
                                     Slider(value: $userOpacity, in: 0.2...1) { editing in
                                         if !editing {
-                                            if userOpacity == 1 { return }
-                                            tips("This window is in translucent mode.\nPlease don't resize it in this mode!\nIf you need to do this, pause it first.", id: "topit.do-not-resize.note")
-                                            nsWindow?.close()
-                                            if let _ = SCManager.updateAvailableContentSync(),
-                                               let scDisplay = getSCDisplayWithMouse(),
-                                               let scWindow = SCManager.getWindows().first(where: { $0.windowID == window.windowID }) {
-                                                createNewWindow(display: scDisplay, window: scWindow , opacity: userOpacity)
+                                            // Apply opacity in place: the old close +
+                                            // refetch + createNewWindow path raced teardown
+                                            // and could end with no window at all.
+                                            nsWindow?.alphaValue = userOpacity
+                                            if userOpacity < 1 {
+                                                tips("This window is in translucent mode.\nPlease don't resize it in this mode!\nIf you need to do this, pause it first.", id: "topit.do-not-resize.note")
                                             }
                                         }
                                     }
@@ -256,15 +255,14 @@ struct OverlayView: View {
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { _ in
-                    //let front = isFrontmostWindow(appID: window.owningApplication?.processID, windowID: window.windowID)
-                    //if let shadow = nsWindow?.hasShadow { if !front && !shadow { nsWindow?.hasShadow = true }}
                     if let frame = getCGWindowFrameWithID(window.windowID) {
                         let newFrame = CGRectTransform(cgRect: frame)
                         if newFrame != nsWindow?.frame && !showPopover {
                             opacity = 0
                             resizing = true
                             showPopover = false
-                            if capturing { stopCapture() }
+                            // Never tear down the pin on move: reconfigure the
+                            // live stream in place instead of stop + recreate.
                             let newDisplay = nsWindow?.screen
                             if newFrame.size != nsWindow?.frame.size || nsScreen != newDisplay {
                                 nsScreen = newDisplay
@@ -281,7 +279,9 @@ struct OverlayView: View {
                             resizing = false
                         }
                     } else {
-                        if cm.capturing { nsWindow?.close() }
+                        // Source gone: only close if this pin is actually live,
+                        // so transient occlusion can't kill a healthy pin.
+                        if capturing && cm.capturing { nsWindow?.close() }
                     }
                 }
             }
@@ -347,7 +347,7 @@ struct OverlayView: View {
     private func stopCapture() {
         if !capturing { return }
         capturing = false
-        cm.stopCapture()
+        cm.stopCapture(preservingCaptureTarget: true)
     }
     
     private func checkMouseLocation() {

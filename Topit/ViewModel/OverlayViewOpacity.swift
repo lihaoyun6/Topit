@@ -159,13 +159,11 @@ struct OverlayViewOpacity: View {
                                 } else {
                                     Slider(value: $userOpacity, in: 0.2...1) { editing in
                                         if !editing {
-                                            if userOpacity == 1 {
-                                                nsWindow?.close()
-                                                if let _ = SCManager.updateAvailableContentSync(),
-                                                   let scDisplay = getSCDisplayWithMouse(),
-                                                   let scWindow = SCManager.getWindows().first(where: { $0.windowID == window.windowID }) {
-                                                    createNewWindow(display: scDisplay, window: scWindow)
-                                                }
+                                            // In-place translucency (see OverlayView): the
+                                            // close + refetch + recreate path lost the pin.
+                                            nsWindow?.alphaValue = userOpacity
+                                            if userOpacity < 1 {
+                                                tips("This window is in translucent mode.\nPlease don't resize it in this mode!\nIf you need to do this, pause it first.", id: "topit.do-not-resize.note")
                                             }
                                         }
                                     }
@@ -331,7 +329,7 @@ struct OverlayViewOpacity: View {
     private func stopCapture() {
         if !capturing { return }
         capturing = false
-        cm.stopCapture()
+        cm.stopCapture(preservingCaptureTarget: true)
     }
     
     private func checkMouseLocation() {

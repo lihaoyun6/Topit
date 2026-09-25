@@ -51,11 +51,14 @@ func createNewWindow(display: SCDisplay, window: SCWindow, opacity: Double? = ni
     var contentView: NSView!
     
     if let p = NSApp.windows.first(where: { $0.title == title }) {
-        panel = p
+        // Close the stale pin panel instead of swapping its contentView:
+        // a swap never fires windowWillClose, orphaning the repeating
+        // move/resize timer and its capture manager (CPU spikes, zombies).
+        p.close()
+        panel = NNSPanel(contentRect: CGRectTransform(cgRect: window.frame), styleMask: [.closable, .nonactivatingPanel, .fullSizeContentView], backing: .buffered, defer: false)
     } else {
         panel = NNSPanel(contentRect: CGRectTransform(cgRect: window.frame), styleMask: [.closable, .nonactivatingPanel, .fullSizeContentView], backing: .buffered, defer: false)
     }
-    
     panel.hasShadow = true
     
     if #unavailable(macOS 13) {

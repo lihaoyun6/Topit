@@ -60,7 +60,7 @@ class WindowHighlighter {
             cover.sharingType = .none
             cover.backgroundColor = .clear
             cover.ignoresMouseEvents = true
-            cover.isReleasedWhenClosed = false
+            cover.isReleasedWhenClosed = true
             cover.collectionBehavior = [.canJoinAllSpaces, .stationary]
             cover.title = "Topit Screen Cover"
             cover.orderFront(self)
@@ -80,6 +80,9 @@ class WindowHighlighter {
     func stopMouseMonitor() {
         DispatchQueue.main.async {
             for w in NSApp.windows.filter({ $0.title == "Topit Screen Cover" }) { w.close() }
+            // mask was closed without release; drop the stale reference so the
+            // EscPanel + hosted HighlightMask actually deallocate.
+            WindowHighlighter.shared.mask = nil
         }
         if let monitor = mouseMonitor {
             NSEvent.removeMonitor(monitor)
@@ -113,6 +116,7 @@ class WindowHighlighter {
         
         mask = EscPanel(contentRect: CGRectTransform(cgRect: frame),
                         styleMask: [.nonactivatingPanel, .fullSizeContentView], backing: .buffered, defer: false)
+        mask?.isReleasedWhenClosed = true
         let contentView = NSHostingView(rootView: HighlightMask(app: app, title: title, windowID: windowID))
         mask?.contentView = contentView
         mask?.title = "Topit Mask Window"

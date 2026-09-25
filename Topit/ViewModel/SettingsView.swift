@@ -96,7 +96,8 @@ struct WindowView: View {
     @AppStorage("keepFocus") private var keepFocus: Bool = false
     @AppStorage("autoAvoid") private var autoAvoid: Bool = true
     @AppStorage("showBorder") private var showBorder: Bool = false
-    @AppStorage("maxFps") private var maxFps: Int = 65535
+    @AppStorage("maxFps") private var maxFps: Int = CaptureFrameRate.standard.rawValue
+    @AppStorage("captureQuality") private var captureQuality: Int = CapturePolicy.defaultQuality.rawValue
     
     var body: some View {
         SForm(spacing: 10) {
@@ -120,10 +121,18 @@ struct WindowView: View {
                 }
                 SDivider()
                 SPicker("Maximum Refresh Rate", selection: $maxFps) {
+                    Text("Adaptive (10–60 Hz)").tag(CaptureFrameRate.adaptive.rawValue)
                     Text("30 Hz").tag(30)
                     Text("60 Hz").tag(60)
                     Text("120 Hz").tag(120)
                     Text("No Limit").tag(65535)
+                }
+                SDivider()
+                SPicker("Capture Quality", selection: $captureQuality,
+                        tips: "Caps the long edge in backing pixels to reduce resource use while preserving aspect ratio. Native keeps the full window resolution; Balanced is useful for larger text-heavy windows.") {
+                    Text("Conservative (2560 px)").tag(CaptureQuality.conservative.rawValue)
+                    Text("Balanced (3840 px)").tag(CaptureQuality.balanced.rawValue)
+                    Text("Native resolution").tag(CaptureQuality.native.rawValue)
                 }
             }
             SGroupBox {
