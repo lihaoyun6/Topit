@@ -77,3 +77,33 @@
 "Ducking Between Pinned Windows" = "在多个窗口间自动闪避";
 "By enabling this, Topit will hide other pinned windows that overlap with the currently active window." = "启用此功能后, Topit 会自动隐藏与当前激活窗口有重叠区域的其他置顶窗口.";
 "Add Border for Translucent Window" = "为半透明窗口添加边框";
+
+// Region pinning
+"Pin a Region…" = "区域置顶…";
+"Select a Region to Pin" = "选择要置顶的区域";
+"Select a region of a window to keep on top" = "框选窗口中的部分区域并实时置顶";
+"Region Capture" = "区域截取";
+"Preparing window capture…" = "正在截取窗口…";
+"Drag to select a region • Release to pin • Esc to cancel" = "拖动框选区域 · 松开置顶 · Esc 取消";
+"Could not capture this window. Check Screen Recording permission and try again." = "无法截取此窗口，请检查屏幕录制权限后重试。";
+"Source window closed • Last frame kept" = "源窗口已关闭 · 已保留最后画面";
+"Capture stopped • Click Resume to retry" = "捕获已停止 · 点继续可重试";
+"Freeze" = "冻结";
+"Copy Snapshot" = "复制截图";
+"Focus Source Window" = "打开源窗口";
+"Unpin Region" = "关闭区域浮窗";
+"Drag to move • Resize from an edge • Double-click to focus source • Right-click for options" = "拖动移动 · 拖边缘缩放 · 双击打开源窗口 · 右键更多选项";
+"This local build includes region pinning. Official updates would replace this feature; automatic updates are disabled." = "此本地版本增加了区域置顶功能。官方更新会覆盖此功能，已停用自动更新。";
+"Allow Topit to Capture Windows" = "允许 Topit 截取窗口";
+"Screen Recording captures the selected window. Accessibility lets you select and focus windows. A locally rebuilt app may need these permissions again." = "屏幕录制用于捕获目标窗口，辅助功能用于选择和激活窗口。本地编译版本可能需要重新授权。";
+"Open Screen Recording Settings" = "打开屏幕录制设置";
+"Open Accessibility Settings" = "打开辅助功能设置";
+"Recheck Permissions" = "重新检查权限";
+"After granting permissions, quit and reopen Topit if capture is still unavailable." = "授权后如果仍无法捕获，请退出并重新打开 Topit。";
+"Interact with the source • Hold Shift to move, resize, or open panel controls" = "默认与源窗口交互 · 按住 Shift 可移动、缩放或显示浮窗控件";
+"Shift: Move / Resize" = "Shift：移动 / 缩放";
+
+"No windows available" = "暂无可用窗口";
+
+"Auto-Hide Regions (Double Control)" = "区域自动隐藏（双击 Control）";
+"Could not focus the source window without raising it." = "无法在不前置窗口的情况下聚焦目标应用。";

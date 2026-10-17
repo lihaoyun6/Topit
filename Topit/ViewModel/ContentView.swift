@@ -44,6 +44,14 @@ struct ContentView: View {
                             .frame(width: 20)
                     })
                     .help("Select Window Directly")
+                    Button("Pin a Region…") {
+                        if let window = selected.first {
+                            RegionPinManager.shared.selectRegion(in: window)
+                        } else {
+                            WindowHighlighter.shared.registerMouseMonitor(selectRegion: true)
+                        }
+                    }
+                    .help("Select a region of a window to keep on top")
                     Button(action: {
                         if let window = selected.first, let panel = panel {
                             _ = SCManager.updateAvailableContentSync()
@@ -73,6 +81,14 @@ struct ContentView: View {
             }
             TabView(selection: $selectedTab) {
                 let allApps = viewModel.windowThumbnails.sorted(by: { $0.key.displayID < $1.key.displayID })
+                if allApps.isEmpty {
+                    VStack {
+                        if viewModel.isReady { Text("No windows available") }
+                        else { ProgressView() }
+                    }
+                    .tag(0)
+                    .tabItem { Text("Topit") }
+                }
                 ForEach(allApps, id: \.key) { element in
                     let (screen, thumbnails) = element
                     let index = allApps.firstIndex(where: { $0.key == screen }) ?? 0
@@ -206,6 +222,16 @@ struct ContentView: View {
                         .resizable().scaledToFit()
                         .frame(width: 20)
                 }).help("Select Window Directly")
+            }
+            ToolbarItem(placement: .automatic) {
+                Button("Pin a Region…") {
+                    if let window = selected.first {
+                        RegionPinManager.shared.selectRegion(in: window)
+                    } else {
+                        WindowHighlighter.shared.registerMouseMonitor(selectRegion: true)
+                    }
+                }
+                .help("Select a region of a window to keep on top")
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: {

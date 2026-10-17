@@ -24,37 +24,41 @@ struct TopitApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-        Settings {
-            SettingsView()
-                .background(
-                    WindowAccessor(
-                        onWindowOpen: { w in
-                            if let w = w {
-                                w.level = .floating
-                                w.titlebarSeparatorStyle = .none
-                                guard let nsSplitView = findNSSplitVIew(view: w.contentView),
-                                      let controller = nsSplitView.delegate as? NSSplitViewController else { return }
-                                controller.splitViewItems.first?.canCollapse = false
-                                controller.splitViewItems.first?.minimumThickness = 140
-                                controller.splitViewItems.first?.maximumThickness = 140
-                                w.orderFront(nil)
-                            }
-                        })
-                )
-        }.commands {
-            CommandGroup(after: .appInfo) {
-                CheckForUpdatesView(updater: updaterController.updater)
+        Settings { EmptyView() }
+            .commands {
+                CommandGroup(replacing: .appSettings) {
+                    Button("Settings…", action: openSettingPanel)
+                        .keyboardShortcut(",", modifiers: .command)
+                }
+                CommandGroup(after: .appInfo) {
+                    CheckForUpdatesView()
+                }
+                RegionAutoHideCommands()
             }
+    }
+}
+
+struct RegionAutoHideCommands: Commands {
+    @ObservedObject private var regions = RegionPinManager.shared
+
+    var body: some Commands {
+        CommandMenu("Region Capture".local) {
+            Toggle("Auto-Hide Regions (Double Control)".local, isOn: Binding(
+                get: { regions.autoHideEnabled },
+                set: { regions.setAutoHideEnabled($0) }
+            ))
         }
     }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     static let shared = AppDelegate()
+    private var mainWindow: NSWindow?
     @AppStorage("showOnDock") private var showOnDock: Bool = true
     @AppStorage("showMenubar") private var showMenubar: Bool = true
     
     func applicationWillFinishLaunching(_ notification: Notification) {
+        ShortcutPreferences.migrateRegionShortcut(in: ud)
         if #unavailable(macOS 14) { isMacOS13 = true }
         if #unavailable(macOS 13) { isMacOS12 = true }
         if showOnDock { NSApp.setActivationPolicy(.regular) }
@@ -64,6 +68,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         let menu = NSMenu()
         menu.addItem(withTitle: "Pin a Window".local, action: #selector(selectWindowToPin), keyEquivalent: "p")
+        menu.addItem(withTitle: "Pin a Region…".local, action: #selector(selectRegionToPin), keyEquivalent: "r")
+        menu.addItem(withTitle: "Auto-Hide Regions (Double Control)".local, action: #selector(toggleRegionAutoHide), keyEquivalent: "").target = self
         menu.addItem(withTitle: "Unpin all Windows".local, action: #selector(unPinAll), keyEquivalent: "u")
         menu.addItem(NSMenuItem.separator())
         menu.addItem(withTitle: "Window Selector".local, action: #selector(openFromMenuBar), keyEquivalent: "s")
@@ -75,6 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarItem.menu = menu
         statusBarItem.isVisible = showMenubar
         
+        KeyboardShortcuts.onKeyDown(for: .selectRegion) { self.selectRegionUsingShortcut() }
         KeyboardShortcuts.onKeyDown(for: .unpinAll) { self.unPinAll() }
         KeyboardShortcuts.onKeyDown(for: .openMainPanel) { _ = self.applicationShouldHandleReopen(NSApp, hasVisibleWindows: false) }
         KeyboardShortcuts.onKeyDown(for: .selectWindow) { WindowHighlighter.shared.registerMouseMonitor() }
@@ -88,20 +95,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        if showOnDock { _ = applicationShouldHandleReopen(NSApp, hasVisibleWindows: false) }
+        RegionPinManager.shared.startMonitoring()
+        if showOnDock || !scPerm || !axPerm {
+            _ = applicationShouldHandleReopen(NSApp, hasVisibleWindows: false)
+            if !scPerm || !axPerm { NSApp.activate(ignoringOtherApps: true) }
+        }
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
-        if NSApp.windows.first(where: { $0.title == "Topit" })?.isVisible != true {
+        if mainWindow?.isVisible != true {
             axPerm = AXIsProcessTrusted()
-            let mainPanel = NSWindow(contentRect: .zero, styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
-            if axPerm && scPerm { mainPanel.level = .floating }
+            let mainPanel = mainWindow ?? NSWindow(contentRect: .zero, styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
+            // Swift owns this reusable window; AppKit must not release it again on close.
+            mainPanel.isReleasedWhenClosed = false
+            mainWindow = mainPanel
+            mainPanel.level = axPerm && scPerm ? .floating : .normal
             mainPanel.title = "Topit"
             mainPanel.titlebarSeparatorStyle = .none
             mainPanel.titlebarAppearsTransparent = true
             mainPanel.isMovableByWindowBackground = true
             mainPanel.toolbarStyle = .unifiedCompact
-            let contentView = NSHostingView(rootView: ContentView())
+            let contentView = NSHostingView(rootView: CapturePermissionView())
             mainPanel.contentView = contentView
             mainPanel.makeKeyAndOrderFront(self)
             mainPanel.center()
@@ -116,16 +130,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {
         let menu = NSMenu()
         menu.addItem(withTitle: "Pin a Window".local, action: #selector(selectWindowToPin), keyEquivalent: "")
+        menu.addItem(withTitle: "Pin a Region…".local, action: #selector(selectRegionToPin), keyEquivalent: "r")
+        menu.addItem(withTitle: "Auto-Hide Regions (Double Control)".local, action: #selector(toggleRegionAutoHide), keyEquivalent: "").target = self
         menu.addItem(withTitle: "Unpin all Windows".local, action: #selector(unPinAll), keyEquivalent: "")
         return menu
     }
     
     @objc func checkForUpdates() {
-        updaterController.checkForUpdates(nil)
+        showLocalUpdateNotice()
+    }
+
+    @objc func toggleRegionAutoHide() {
+        let regions = RegionPinManager.shared
+        regions.setAutoHideEnabled(!regions.autoHideEnabled)
+    }
+
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        if menuItem.action == #selector(toggleRegionAutoHide) {
+            menuItem.state = RegionPinManager.shared.autoHideEnabled ? .on : .off
+        }
+        return true
     }
     
     @objc func unPinAll() {
         DispatchQueue.main.async {
+            RegionPinManager.shared.closeAll()
+            WindowHighlighter.shared.stopMouseMonitor()
             for layer in NSApp.windows.filter({$0.title.hasPrefix("Topit Layer")}) { layer.close() }
             AvoidManager.shared.activedFrame = .zero
         }
@@ -143,6 +173,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         _ = applicationShouldHandleReopen(NSApp, hasVisibleWindows: false)
     }
     
+    private func selectRegionUsingShortcut() {
+        guard CGPreflightScreenCaptureAccess(), AXIsProcessTrusted() else {
+            _ = applicationShouldHandleReopen(NSApp, hasVisibleWindows: false)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+        // The old whole-window chord worked on the window under the pointer. Start
+        // cropping that window immediately, so the next drag defines the region.
+        if let target = getWindowUnderMouse(),
+           let windowID = target["kCGWindowNumber"] as? CGWindowID,
+           target["kCGWindowOwnerPID"] as? pid_t != getpid() {
+            WindowHighlighter.shared.stopMouseMonitor()
+            RegionPinManager.shared.selectRegion(windowID: windowID)
+        } else {
+            WindowHighlighter.shared.registerMouseMonitor(selectRegion: true)
+        }
+    }
+
+    @objc func selectRegionToPin() {
+        guard CGPreflightScreenCaptureAccess(), AXIsProcessTrusted() else {
+            _ = applicationShouldHandleReopen(NSApp, hasVisibleWindows: false)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+        WindowHighlighter.shared.registerMouseMonitor(selectRegion: true)
+    }
+
     @objc func selectWindowToPin() {
         WindowHighlighter.shared.registerMouseMonitor()
     }
@@ -226,34 +283,9 @@ func createAlert(level: NSAlert.Style = .warning, title: String, message: String
 
 func openSettingPanel() {
     closeMainWindow()
-    NSApp.activate(ignoringOtherApps: true)
-    if #available(macOS 14, *) {
-        NSApp.mainMenu?.items.first?.submenu?.item(at: 3)?.performAction()
-    }else if #available(macOS 13, *) {
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-    } else {
-        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-    }
+    TopitSettingsController.shared.show()
 }
 
-func findNSSplitVIew(view: NSView?) -> NSSplitView? {
-    var queue = [NSView]()
-    if let root = view { queue.append(root) }
-    
-    while !queue.isEmpty {
-        let current = queue.removeFirst()
-        if current is NSSplitView { return current as? NSSplitView }
-        for subview in current.subviews { queue.append(subview) }
-    }
-    return nil
-}
-
-extension NSMenuItem {
-    func performAction() {
-        guard let menu else { return }
-        menu.performActionForItem(at: menu.index(of: self))
-    }
-}
 
 class NNSPanel: NSPanel {
     override var canBecomeKey: Bool {

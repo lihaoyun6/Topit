@@ -1,0 +1,4 @@
+{
+  "identity_sha1": "REPLACE_WITH_CERTIFICATE_SHA1",
+  "keychain": "/absolute/path/to/signing.keychain-db"
+}

@@ -165,9 +165,8 @@ class SCManager {
             if let error = error {
                 switch error {
                 case SCStreamError.userDeclined:
-                    DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
-                        self.updateAvailableContent() {_ in}
-                    }
+                    // The permission page provides an explicit retry; do not poll TCC.
+                    break
                 default:
                     print("Error: failed to fetch available content: ".local, error.localizedDescription)
                 }
@@ -208,102 +207,106 @@ class SCManager {
 }
 
 class WindowSelectorViewModel: NSObject, ObservableObject, SCStreamDelegate, SCStreamOutput {
-    @Published var windowThumbnails = [SCDisplay:[WindowThumbnail]]()
+    @Published var windowThumbnails = [SCDisplay: [WindowThumbnail]]()
     @Published var isReady = false
-    private var allWindows = [SCWindow]()
-    private var streams = [SCStream]()
-    
-    override init() {
-        super.init()
-        //DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { self.setupStreams(filter: filter) }
+    private struct Request {
+        let stream: SCStream
+        let window: SCWindow
+        let displays: [SCDisplay]
     }
-    
+    // Output callbacks and every mutation run on main. A refresh invalidates the
+    // entire generation; callbacks never index arrays rebuilt by a newer refresh.
+    private var generation = UUID()
+    private var requests = [ObjectIdentifier: Request]()
+    private var launching = false
+    private let imageContext = CIContext()
+
     func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, of type: SCStreamOutputType) {
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        let ciContext = CIContext()
-        let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent)
-        let nsImage: NSImage
-        if let cgImage = cgImage {
-            nsImage = NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
+        guard type == .screen, sampleBuffer.isValid,
+              let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+              let request = requests.removeValue(forKey: ObjectIdentifier(stream)) else { return }
+        let image = CIImage(cvPixelBuffer: pixelBuffer)
+        let thumbnail: NSImage
+        if let cgImage = imageContext.createCGImage(image, from: image.extent) {
+            thumbnail = NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
         } else {
-            nsImage = NSImage.unknowScreen
+            thumbnail = .unknowScreen
         }
-        if let index = streams.firstIndex(of: stream), index + 1 <= allWindows.count {
-            let currentWindow = allWindows[index]
-            let thumbnail = WindowThumbnail(image: nsImage, window: currentWindow)
-            guard let displays = SCManager.availableContent?.displays.filter({ currentWindow.frame.intersects($0.frame) }) else {
-                self.streams[index].stopCapture()
-                return
+        appendThumbnail(thumbnail, window: request.window, displays: request.displays)
+        // Stop this exact stream, never an index into a later generation's array.
+        stream.stopCapture(completionHandler: nil)
+        if !launching && requests.isEmpty { isReady = true }
+    }
+
+    private func appendThumbnail(_ image: NSImage, window: SCWindow, displays: [SCDisplay]) {
+        for display in displays {
+            var items = windowThumbnails[display] ?? []
+            if !items.contains(where: { $0.window.windowID == window.windowID }) {
+                items.append(WindowThumbnail(image: image, window: window))
+                windowThumbnails[display] = items
             }
-            for d in displays {
-                DispatchQueue.main.async {[self] in
-                    if windowThumbnails[d] != nil {
-                        if !windowThumbnails[d]!.contains(where: { $0.window == currentWindow }) { windowThumbnails[d]!.append(thumbnail) }
-                    } else {
-                        windowThumbnails[d] = [thumbnail]
-                    }
-                }
-            }
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { self.streams[index].stopCapture() }
-            if index + 1 == streams.count { DispatchQueue.main.async { self.isReady = true }}
         }
     }
 
     func setupStreams(filter: Bool = false, capture: Bool = true) {
-        SCManager.updateAvailableContent {[self] availableContent in
-            Task {
-                do {
-                    streams.removeAll()
-                    DispatchQueue.main.async { self.windowThumbnails.removeAll() }
-                    allWindows = SCManager.getWindows().filter({
-                        !($0.title == "" && $0.owningApplication?.bundleIdentifier == "com.apple.finder")
-                        && $0.owningApplication?.bundleIdentifier != Bundle.main.bundleIdentifier
-                        && $0.owningApplication?.applicationName != ""
-                    })
-                    if filter { allWindows = allWindows.filter({ $0.title != "" }) }
-                    if capture {
-                        let contentFilters = allWindows.map { SCContentFilter(desktopIndependentWindow: $0) }
-                        for (index, contentFilter) in contentFilters.enumerated() {
-                            let streamConfiguration = SCStreamConfiguration()
-                            let width = allWindows[index].frame.width
-                            let height = allWindows[index].frame.height
-                            var factor = 0.5
-                            if width < 200 && height < 200 { factor = 1.0 }
-                            streamConfiguration.width = Int(width * factor)
-                            streamConfiguration.height = Int(height * factor)
-                            streamConfiguration.minimumFrameInterval = CMTime(value: 1, timescale: CMTimeScale(1))
-                            streamConfiguration.pixelFormat = kCVPixelFormatType_32BGRA
-                            if #available(macOS 13, *) { streamConfiguration.capturesAudio = false }
-                            streamConfiguration.showsCursor = false
-                            streamConfiguration.scalesToFit = true
-                            streamConfiguration.queueDepth = 3
-                            let stream = SCStream(filter: contentFilter, configuration: streamConfiguration, delegate: self)
-                            try stream.addStreamOutput(self, type: .screen, sampleHandlerQueue: .main)
-                            try await stream.startCapture()
-                            streams.append(stream)
-                        }
-                    } else {
-                        for w in allWindows {
-                            let thumbnail = WindowThumbnail(image: NSImage.unknowScreen, window: w)
-                            guard let displays = availableContent?.displays.filter({ w.frame.intersects($0.frame) }) else { break }
-                            for d in displays {
-                                DispatchQueue.main.async {[self] in
-                                    if windowThumbnails[d] != nil {
-                                        if !windowThumbnails[d]!.contains(where: { $0.window == w }) {
-                                            windowThumbnails[d]!.append(thumbnail)
-                                        }
-                                    } else {
-                                        windowThumbnails[d] = [thumbnail]
-                                    }
-                                }
-                            }
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { self.isReady = true }
-                    }
-                } catch {
-                    print("Get windowshot error：\(error)")
+        let current = UUID()
+        generation = current
+        launching = true
+        isReady = false
+        let previous = requests.values.map(\.stream)
+        requests.removeAll()
+        previous.forEach { $0.stopCapture(completionHandler: nil) }
+        windowThumbnails.removeAll()
+        SCManager.updateAvailableContent { [weak self] content in
+            Task { @MainActor [weak self] in
+                guard let self, self.generation == current else { return }
+                guard let content else { self.launching = false; self.isReady = true; return }
+                let windows = SCManager.getWindows().filter {
+                    !($0.title == "" && $0.owningApplication?.bundleIdentifier == "com.apple.finder")
+                    && $0.owningApplication?.bundleIdentifier != Bundle.main.bundleIdentifier
+                    && $0.owningApplication?.applicationName != ""
+                    && (!filter || $0.title != "")
                 }
+                for window in windows {
+                    guard self.generation == current else { return }
+                    let displays = content.displays.filter { window.frame.intersects($0.frame) }
+                    if !capture {
+                        self.appendThumbnail(.unknowScreen, window: window, displays: displays)
+                        continue
+                    }
+                    let config = SCStreamConfiguration()
+                    let factor = window.frame.width < 200 && window.frame.height < 200 ? 1.0 : 0.5
+                    config.width = max(1, Int(window.frame.width * factor))
+                    config.height = max(1, Int(window.frame.height * factor))
+                    config.minimumFrameInterval = CMTime(value: 1, timescale: 1)
+                    config.pixelFormat = kCVPixelFormatType_32BGRA
+                    if #available(macOS 13, *) { config.capturesAudio = false }
+                    config.showsCursor = false
+                    config.scalesToFit = true
+                    config.queueDepth = 3
+                    let stream = SCStream(filter: SCContentFilter(desktopIndependentWindow: window), configuration: config, delegate: self)
+                    let key = ObjectIdentifier(stream)
+                    self.requests[key] = Request(stream: stream, window: window, displays: displays)
+                    do {
+                        try stream.addStreamOutput(self, type: .screen, sampleHandlerQueue: .main)
+                        try await stream.startCapture()
+                    } catch {
+                        if self.generation == current, self.requests.removeValue(forKey: key) != nil {
+                            self.appendThumbnail(.unknowScreen, window: window, displays: displays)
+                        }
+                        stream.stopCapture(completionHandler: nil)
+                    }
+                    guard self.generation == current else { stream.stopCapture(completionHandler: nil); return }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [weak self, weak stream] in
+                        guard let self, self.generation == current,
+                              let pending = self.requests.removeValue(forKey: key) else { return }
+                        self.appendThumbnail(.unknowScreen, window: pending.window, displays: pending.displays)
+                        stream?.stopCapture(completionHandler: nil)
+                        if !self.launching && self.requests.isEmpty { self.isReady = true }
+                    }
+                }
+                self.launching = false
+                if self.requests.isEmpty { self.isReady = true }
             }
         }
     }

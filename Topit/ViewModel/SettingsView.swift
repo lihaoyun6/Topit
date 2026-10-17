@@ -10,29 +10,52 @@ import KeyboardShortcuts
 import ServiceManagement
 
 struct SettingsView: View {
-    @State private var selectedItem: String? = "General"
-    
-    var body: some View {
-        NavigationView {
-            List(selection: $selectedItem) {
-                NavigationLink(destination: GeneralView(), tag: "General", selection: $selectedItem) {
-                    Label("General", image: "gear")
-                }
-                NavigationLink(destination: WindowView(), tag: "Window", selection: $selectedItem) {
-                    Label("Windows", image: "window")
-                }
-                NavigationLink(destination: HotkeyView(), tag: "Hotkey", selection: $selectedItem) {
-                    Label("Hotkey", image: "hotkey")
-                }
-                NavigationLink(destination: FilterView(), tag: "Filter", selection: $selectedItem) {
-                    Label("App Filter", image: "block")
-                }
+    private enum Section: String, CaseIterable {
+        case general = "General", windows = "Windows", hotkeys = "Hotkey", filter = "App Filter"
+        var icon: String {
+            switch self {
+            case .general: return "gearshape"
+            case .windows: return "macwindow"
+            case .hotkeys: return "keyboard"
+            case .filter: return "line.3.horizontal.decrease.circle"
             }
-            .listStyle(.sidebar)
-            .padding(.top, 9)
         }
-        .frame(width: 600, height: 400)
-        .navigationTitle("Topit Settings")
+    }
+    @State private var selected: Section = .general
+
+    var body: some View {
+        HStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(Section.allCases, id: \.self) { section in
+                    Button {
+                        selected = section
+                    } label: {
+                        Label(LocalizedStringKey(section.rawValue), systemImage: section.icon)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(9)
+                            .background(selected == section ? Color.accentColor.opacity(0.18) : .clear)
+                            .cornerRadius(7)
+                    }
+                    .buttonStyle(.plain)
+                }
+                Spacer()
+            }
+            .padding(12)
+            .frame(width: 164)
+            Divider()
+            ScrollView {
+                Group {
+                    switch selected {
+                    case .general: GeneralView()
+                    case .windows: WindowView()
+                    case .hotkeys: HotkeyView()
+                    case .filter: FilterView()
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+            }
+        }
+        .frame(minWidth: 700, minHeight: 460)
     }
 }
 
@@ -40,7 +63,10 @@ struct GeneralView: View {
     @AppStorage("showOnDock") private var showOnDock: Bool = true
     @AppStorage("showMenubar") private var showMenubar: Bool = true
     
-    @State private var launchAtLogin = false
+    @State private var launchAtLogin: Bool = {
+        if #available(macOS 13, *) { return SMAppService.mainApp.status == .enabled }
+        return false
+    }()
     
     var body: some View {
         SForm {
@@ -65,10 +91,10 @@ struct GeneralView: View {
                 SToggle("Show Topit on Menu Bar", isOn: $showMenubar)
             }
             SGroupBox(label: "Update") {
-                UpdaterSettingsView(updater: updaterController.updater)
+                UpdaterSettingsView()
             }
             VStack(spacing: 8) {
-                CheckForUpdatesView(updater: updaterController.updater)
+                CheckForUpdatesView()
                 if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
                     Text("Topit v\(appVersion)")
                         .font(.subheadline)
@@ -76,7 +102,6 @@ struct GeneralView: View {
                 }
             }
         }
-        .onAppear{ if #available(macOS 13, *) { launchAtLogin = (SMAppService.mainApp.status == .enabled) }}
         .onChange(of: showMenubar) { newValue in statusBarItem.isVisible = newValue }
         .onChange(of: showOnDock) { newValue in
             if !newValue {
@@ -146,6 +171,8 @@ struct HotkeyView: View {
     var body: some View {
         SForm(spacing: 10) {
             SGroupBox(label: "Hotkey") {
+                SItem(label: "Select a Region to Pin") { KeyboardShortcuts.Recorder("", name: .selectRegion) }
+                SDivider()
                 SItem(label: "Select a Window to Pin") { KeyboardShortcuts.Recorder("", name: .selectWindow) }
                 SDivider()
                 SItem(label: "Open Window Selector"){ KeyboardShortcuts.Recorder("", name: .openMainPanel) }
@@ -177,6 +204,7 @@ struct FilterView: View {
 }
 
 extension KeyboardShortcuts.Name {
+    static let selectRegion = Self("selectRegion", default: .init(.t, modifiers: [.command, .shift]))
     static let selectWindow = Self("selectWindow")
     static let openMainPanel = Self("openMainPanel")
     static let pinUnpin = Self("pinUnpin")

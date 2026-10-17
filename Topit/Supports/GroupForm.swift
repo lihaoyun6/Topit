@@ -49,8 +49,14 @@ struct SGroupBox<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     var body: some View {
-        GroupBox(label: label != nil ? Text(label!).font(.headline) : nil) {
-            VStack(spacing: 10) { content() }.padding(5)
+        VStack(alignment: .leading, spacing: 8) {
+            if let label { Text(label).font(.headline) }
+            VStack(spacing: 10) { content() }
+                .padding(12)
+                .frame(maxWidth: .infinity)
+                .background(Color(nsColor: .controlBackgroundColor))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.primary.opacity(0.1)))
         }
     }
 }

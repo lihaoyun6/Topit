@@ -60,3 +60,14 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Rebuildable local code index
+graphify-out/
+
+# Machine-local signing settings; never store private keys in the repository.
+Config/signing.local.json
+__pycache__/
+dist/
+DerivedData/
+*.p12
+*.keychain-db

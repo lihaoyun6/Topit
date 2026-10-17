@@ -31,6 +31,8 @@ class pnpMouse: NSScriptCommand {
 class unpinAllWindows: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         DispatchQueue.main.async {
+            RegionPinManager.shared.closeAll()
+            WindowHighlighter.shared.stopMouseMonitor()
             for layer in NSApp.windows.filter({$0.title.hasPrefix("Topit Layer")}) { layer.close() }
             AvoidManager.shared.activedFrame = .zero
         }

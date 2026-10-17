@@ -27,12 +27,14 @@ struct HighlightMask: View {
             .onPressGesture {
                 if let mask = WindowHighlighter.shared.mask {
                     mask.order(.above, relativeTo: windowID)
-                    if let window = getSCWindowWithID(UInt32(windowID)),
-                       !SCManager.pinnedWdinwows.contains(window),
+                    if let window = getSCWindowWithID(UInt32(windowID), noFilter: WindowHighlighter.shared.selectingRegion),
+                       (WindowHighlighter.shared.selectingRegion || !SCManager.pinnedWdinwows.contains(window)),
                        let display = getSCDisplayWithMouse() {
                         mask.close()
-                        createNewWindow(display: display, window: window)
+                        let region = WindowHighlighter.shared.selectingRegion
                         WindowHighlighter.shared.stopMouseMonitor()
+                        if region { RegionPinManager.shared.selectRegion(in: window) }
+                        else { createNewWindow(display: display, window: window) }
                         return
                     }
                     color = .red
@@ -44,14 +46,18 @@ struct HighlightMask: View {
 
 class WindowHighlighter {
     static let shared = WindowHighlighter()
+    private(set) var selectingRegion = false
     var mouseMonitor: Any?
     var mouseMonitorL: Any?
     var targetWindowID: Int?
     var mask: EscPanel?
     
-    func registerMouseMonitor() {
+    func registerMouseMonitor(selectRegion: Bool = false) {
+        stopMouseMonitor()
+        selectingRegion = selectRegion
+        targetWindowID = nil
         closeMainWindow()
-        DispatchQueue.main.async { tips("Click on the window you want to pin\nor press Esc to cancel.".local, id: "topit.how-to-select.note") }
+        if !selectRegion { DispatchQueue.main.async { tips("Click on the window you want to pin\nor press Esc to cancel.".local, id: "topit.how-to-select.note") }}
         
         for screen in NSScreen.screens {
             let cover = EscPanel(contentRect: screen.frame, styleMask: [.nonactivatingPanel, .fullSizeContentView], backing: .buffered, defer: false)
@@ -67,20 +73,26 @@ class WindowHighlighter {
         }
         
         if mouseMonitor == nil {
-            mouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { _ in self.updateMask() }
+            mouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .keyDown]) { event in
+                if SelectionEventPolicy.cancelsSelection(event) { self.stopMouseMonitor() }
+                else { self.updateMask() }
+            }
         }
         if mouseMonitorL == nil {
-            mouseMonitorL = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
+            mouseMonitorL = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved, .keyDown]) { event in
+                if SelectionEventPolicy.cancelsSelection(event) { self.stopMouseMonitor(); return nil }
                 self.updateMask()
                 return event
             }
         }
+        updateMask()
     }
         
     func stopMouseMonitor() {
-        DispatchQueue.main.async {
-            for w in NSApp.windows.filter({ $0.title == "Topit Screen Cover" }) { w.close() }
-        }
+        mask?.close()
+        mask = nil
+        targetWindowID = nil
+        for w in NSApp.windows.filter({ $0.title == "Topit Screen Cover" }) { w.close() }
         if let monitor = mouseMonitor {
             NSEvent.removeMonitor(monitor)
             mouseMonitor = nil

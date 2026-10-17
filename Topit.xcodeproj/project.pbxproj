@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18BC298B2CEC21B100FF22A8 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 18BC298A2CEC21B100FF22A8 /* Sparkle */; };
 		18D6C25C2CEF5FA00026BFB3 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 18D6C25B2CEF5FA00026BFB3 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +40,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18BC298B2CEC21B100FF22A8 /* Sparkle in Frameworks */,
 				18D6C25C2CEF5FA00026BFB3 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,7 +83,6 @@
 			);
 			name = Topit;
 			packageProductDependencies = (
-				18BC298A2CEC21B100FF22A8 /* Sparkle */,
 				18D6C25B2CEF5FA00026BFB3 /* KeyboardShortcuts */,
 			);
 			productName = Topit;
@@ -119,7 +116,6 @@
 			mainGroup = 18221D6A2CEA07BA009F773F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				18BC29892CEC21B100FF22A8 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				18D6C25A2CEF5FA00026BFB3 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -279,7 +275,7 @@
 				CODE_SIGN_ENTITLEMENTS = Topit/Topit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"Topit/Preview Content\"";
 				DEVELOPMENT_TEAM = L4T783637F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -293,7 +289,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
-				MARKETING_VERSION = 0.1.5;
+				MARKETING_VERSION = 0.1.22;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lihaoyun6.Topit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -309,7 +305,7 @@
 				CODE_SIGN_ENTITLEMENTS = Topit/Topit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"Topit/Preview Content\"";
 				DEVELOPMENT_TEAM = L4T783637F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -323,7 +319,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
-				MARKETING_VERSION = 0.1.5;
+				MARKETING_VERSION = 0.1.22;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lihaoyun6.Topit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -355,14 +351,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		18BC29892CEC21B100FF22A8 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sparkle-project/Sparkle";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.6.4;
-			};
-		};
+
 		18D6C25A2CEF5FA00026BFB3 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
@@ -374,11 +363,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		18BC298A2CEC21B100FF22A8 /* Sparkle */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 18BC29892CEC21B100FF22A8 /* XCRemoteSwiftPackageReference "Sparkle" */;
-			productName = Sparkle;
-		};
+
 		18D6C25B2CEF5FA00026BFB3 /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 18D6C25A2CEF5FA00026BFB3 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;

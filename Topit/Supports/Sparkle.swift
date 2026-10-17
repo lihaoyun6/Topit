@@ -1,67 +1,23 @@
-//
-//  Sparkle.swift
-//  QuickRecorder
-//
-//  Created by apple on 2024/5/2.
-//
-
 import SwiftUI
-import Sparkle
 
-let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+// Official releases would overwrite the region feature. This local build has no updater.
+private let localUpdateMessage = "This local build includes region pinning. Official updates would replace this feature; automatic updates are disabled."
 
-// This view model class publishes when new updates can be checked by the user
-final class CheckForUpdatesViewModel: ObservableObject {
-    @Published var canCheckForUpdates = false
-
-    init(updater: SPUUpdater) {
-        updater.publisher(for: \.canCheckForUpdates)
-            .assign(to: &$canCheckForUpdates)
-    }
+func showLocalUpdateNotice() {
+    createAlert(title: "Topit", message: localUpdateMessage, button1: "OK").runModal()
 }
 
-// This is the view for the Check for Updates menu item
-// Note this intermediate view is necessary for the disabled state on the menu item to work properly before Monterey.
-// See https://stackoverflow.com/questions/68553092/menu-not-updating-swiftui-bug for more info
 struct CheckForUpdatesView: View {
-    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
-    private let updater: SPUUpdater
-    
-    init(updater: SPUUpdater) {
-        self.updater = updater
-        
-        // Create our view model for our CheckForUpdatesView
-        self.checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
-    }
-    
     var body: some View {
-        Button("Check for Updates…", action: updater.checkForUpdates)
-            .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
+        Button("Check for Updates…", action: showLocalUpdateNotice)
     }
 }
 
 struct UpdaterSettingsView: View {
-    private let updater: SPUUpdater
-    
-    @State private var automaticallyChecksForUpdates: Bool
-    @State private var automaticallyDownloadsUpdates: Bool
-    
-    init(updater: SPUUpdater) {
-        self.updater = updater
-        self.automaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
-        self.automaticallyDownloadsUpdates = updater.automaticallyDownloadsUpdates
-    }
-    
     var body: some View {
-        SToggle("Automatically check for updates", isOn: $automaticallyChecksForUpdates)
-            .onChange(of: automaticallyChecksForUpdates) { newValue in
-                updater.automaticallyChecksForUpdates = newValue
-            }
-        SDivider()
-        SToggle("Automatically download updates", isOn: $automaticallyDownloadsUpdates)
-            .disabled(!automaticallyChecksForUpdates)
-            .onChange(of: automaticallyDownloadsUpdates) { newValue in
-                updater.automaticallyDownloadsUpdates = newValue
-            }
+        Text(localUpdateMessage.local)
+            .font(.system(size: 12))
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }

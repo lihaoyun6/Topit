@@ -77,3 +77,33 @@
 "Ducking Between Pinned Windows" = "在多個視窗間自動閃避";
 "By enabling this, Topit will hide other pinned windows that overlap with the currently active window." = "啟用此功能後, Topit 會自動隱藏與當前啟用視窗有重疊區域的其他置頂視窗.";
 "Add Border for Translucent Window" = "為半透明視窗顯示邊框";
+
+// Region pinning
+"Pin a Region…" = "區域置頂…";
+"Select a Region to Pin" = "選擇要置頂的區域";
+"Select a region of a window to keep on top" = "框選視窗中的部分區域並即時置頂";
+"Region Capture" = "區域擷取";
+"Preparing window capture…" = "正在擷取視窗…";
+"Drag to select a region • Release to pin • Esc to cancel" = "拖曳框選區域 · 放開置頂 · Esc 取消";
+"Could not capture this window. Check Screen Recording permission and try again." = "無法擷取此視窗，請檢查螢幕錄製權限後重試。";
+"Source window closed • Last frame kept" = "來源視窗已關閉 · 已保留最後畫面";
+"Capture stopped • Click Resume to retry" = "擷取已停止 · 點繼續可重試";
+"Freeze" = "凍結";
+"Copy Snapshot" = "複製截圖";
+"Focus Source Window" = "開啟來源視窗";
+"Unpin Region" = "關閉區域浮窗";
+"Drag to move • Resize from an edge • Double-click to focus source • Right-click for options" = "拖曳移動 · 拖邊緣縮放 · 按兩下開啟來源視窗 · 右鍵更多選項";
+"This local build includes region pinning. Official updates would replace this feature; automatic updates are disabled." = "此本機版本增加了區域置頂功能。官方更新會覆蓋此功能，已停用自動更新。";
+"Allow Topit to Capture Windows" = "允許 Topit 擷取視窗";
+"Screen Recording captures the selected window. Accessibility lets you select and focus windows. A locally rebuilt app may need these permissions again." = "螢幕錄製用於擷取目標視窗，輔助使用用於選擇和啟用視窗。本機編譯版本可能需要重新授權。";
+"Open Screen Recording Settings" = "開啟螢幕錄製設定";
+"Open Accessibility Settings" = "開啟輔助使用設定";
+"Recheck Permissions" = "重新檢查權限";
+"After granting permissions, quit and reopen Topit if capture is still unavailable." = "授權後如果仍無法擷取，請結束並重新開啟 Topit。";
+"Interact with the source • Hold Shift to move, resize, or open panel controls" = "預設與來源視窗互動 · 按住 Shift 可移動、縮放或顯示浮窗控制項";
+"Shift: Move / Resize" = "Shift：移動 / 縮放";
+
+"No windows available" = "暫無可用視窗";
+
+"Auto-Hide Regions (Double Control)" = "區域自動隱藏（按兩下 Control）";
+"Could not focus the source window without raising it." = "無法在不前置視窗的情況下聚焦目標應用程式。";

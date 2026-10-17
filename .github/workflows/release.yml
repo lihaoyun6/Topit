@@ -1,0 +1,80 @@
+name: Release
+run-name: Release ${{ inputs.tag }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Prepared, locally signed release tag (vX.Y.Z)
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  source:
+    name: Resolve release source
+    runs-on: ubuntu-latest
+    outputs:
+      commit: ${{ steps.source.outputs.commit }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate tag and branch ancestry
+        id: source
+        env:
+          TOPIT_TAG: ${{ inputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TOPIT_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          TOPIT_COMMIT=$(git rev-parse --verify "refs/tags/$TOPIT_TAG^{commit}")
+          git merge-base --is-ancestor "$TOPIT_COMMIT" origin/main
+          printf 'commit=%s\n' "$TOPIT_COMMIT" >> "$GITHUB_OUTPUT"
+
+  checks:
+    name: Validate release source
+    needs: source
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ needs.source.outputs.commit }}
+    permissions:
+      contents: read
+
+  publish:
+    name: Verify fixed signature and publish
+    needs: [source, checks]
+    runs-on: macos-15
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ needs.source.outputs.commit }}
+          persist-credentials: false
+      - name: Download the prepared signed assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TOPIT_TAG: ${{ inputs.tag }}
+        run: gh release download "$TOPIT_TAG" --repo "$GITHUB_REPOSITORY" --dir "$RUNNER_TEMP/topit-release-assets"
+      - name: Verify hashes, fixed certificate, source and update payload
+        env:
+          TOPIT_TAG: ${{ inputs.tag }}
+          TOPIT_COMMIT: ${{ needs.source.outputs.commit }}
+        run: python3 Scripts/release_assets.py --assets "$RUNNER_TEMP/topit-release-assets" --tag "$TOPIT_TAG" --commit "$TOPIT_COMMIT"
+      - name: Publish the verified prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TOPIT_TAG: ${{ inputs.tag }}
+        run: |
+          gh release edit "$TOPIT_TAG" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
+          printf 'Published: https://github.com/%s/releases/tag/%s\n' "$GITHUB_REPOSITORY" "$TOPIT_TAG" >> "$GITHUB_STEP_SUMMARY"
