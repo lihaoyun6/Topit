@@ -202,6 +202,16 @@ func getCGWindowFrameWithID(_ windowID: CGWindowID) -> CGRect? {
     return nil
 }
 
+// While switching Spaces, the window server slides every window on that display and
+// CGWindowList reports the animated bounds. The overlay lives on the same Space and
+// slides too, so a mismatch between its reported bounds and its own frame means a
+// transition is in progress and the source window's bounds can't be trusted.
+func isSpaceTransitioning(_ window: NSWindow?) -> Bool {
+    guard let window, let frame = getCGWindowFrameWithID(CGWindowID(window.windowNumber)) else { return false }
+    let reported = CGRectTransform(cgRect: frame)
+    return abs(reported.minX - window.frame.minX) > 1 || abs(reported.minY - window.frame.minY) > 1
+}
+
 func getCGWindowWithID(_ windowID: CGWindowID) -> [String: Any]? {
     guard let cgWindows = CGWindowListCopyWindowInfo([.optionIncludingWindow], windowID) as? [[String: Any]],
           let cgWindow = cgWindows.first else {

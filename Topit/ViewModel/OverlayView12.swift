@@ -127,6 +127,7 @@ struct OverlayView12: View {
         .onAppear {
             windowSize = window.frame.size
             timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                if isSpaceTransitioning(nsWindow) { return }
                 if let frame = getCGWindowFrameWithID(window.windowID) {
                     let newFrame = CGRectTransform(cgRect: frame)
                     if newFrame != nsWindow?.frame {

@@ -258,6 +258,7 @@ struct OverlayView: View {
                 timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { _ in
                     //let front = isFrontmostWindow(appID: window.owningApplication?.processID, windowID: window.windowID)
                     //if let shadow = nsWindow?.hasShadow { if !front && !shadow { nsWindow?.hasShadow = true }}
+                    if isSpaceTransitioning(nsWindow) { return }
                     if let frame = getCGWindowFrameWithID(window.windowID) {
                         let newFrame = CGRectTransform(cgRect: frame)
                         if newFrame != nsWindow?.frame && !showPopover {
