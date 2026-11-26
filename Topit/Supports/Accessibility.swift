@@ -40,6 +40,10 @@ func getAppIcon(_ app: SCRunningApplication) -> NSImage? {
         icon.size = NSSize(width: 69, height: 69)
         return icon
     }
+    if let icon = NSRunningApplication(processIdentifier: app.processID)?.icon?.copy() as? NSImage {
+        icon.size = NSSize(width: 69, height: 69)
+        return icon
+    }
     let icon = NSImage(systemSymbolName: "questionmark.app.dashed", accessibilityDescription: "blank icon")
     icon!.size = NSSize(width: 69, height: 69)
     return icon
@@ -80,9 +84,9 @@ func createNewWindow(display: SCDisplay, window: SCWindow, opacity: Double? = ni
     
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
         panel.setFrame(CGRectTransform(cgRect: window.frame), display: true)
-        if let id = window.owningApplication?.bundleIdentifier {
+        if let pid = window.owningApplication?.processID {
             NSApp.activate(ignoringOtherApps: true)
-            bringAppToFront(bundleIdentifier: id)
+            bringAppToFront(pid: pid)
         }
     }
 }
@@ -166,8 +170,8 @@ func CGPointTransform(cgPoint: CGPoint, mainHeight: CGFloat) -> NSPoint {
     return NSPoint(x: x, y: mainHeight - y)
 }
 
-func bringAppToFront(bundleIdentifier: String) {
-    if let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first {
+func bringAppToFront(pid: pid_t) {
+    if let app = NSRunningApplication(processIdentifier: pid) {
         app.activate(options: [.activateIgnoringOtherApps])
     } else {
         print("Application not found.")

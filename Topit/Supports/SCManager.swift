@@ -145,7 +145,7 @@ class ScreenCaptureManager: NSObject, ObservableObject, SCStreamDelegate, SCStre
 class SCManager {
     static var pinnedWdinwows = [SCWindow]()
     static var availableContent: SCShareableContent?
-    static private let excludedApps = ["", "com.apple.dock", "com.apple.screencaptureui", "com.apple.controlcenter", "com.apple.notificationcenterui", "com.apple.systemuiserver", "com.apple.WindowManager", "dev.mnpn.Azayaka", "com.gaosun.eul", "com.pointum.hazeover", "net.matthewpalmer.Vanilla", "com.dwarvesv.minimalbar", "com.bjango.istatmenus.status", "com.macpaw.CleanMyMac4", "com.lihaoyun6.Topit"]
+    static private let excludedApps = ["com.apple.dock", "com.apple.screencaptureui", "com.apple.controlcenter", "com.apple.notificationcenterui", "com.apple.systemuiserver", "com.apple.WindowManager", "dev.mnpn.Azayaka", "com.gaosun.eul", "com.pointum.hazeover", "net.matthewpalmer.Vanilla", "com.dwarvesv.minimalbar", "com.bjango.istatmenus.status", "com.macpaw.CleanMyMac4", "com.lihaoyun6.Topit"]
     
     static func updateAvailableContentSync() -> SCShareableContent? {
         let semaphore = DispatchSemaphore(value: 0)
@@ -188,14 +188,23 @@ class SCManager {
     static func getWindows(noFilter: Bool = false) -> [SCWindow] {
         guard let content = availableContent else { return [] }
         var appBlackList = [String]()
+        var pathBlackList = [String]()
         if let savedData = ud.data(forKey: "hiddenApps"),
            let decodedApps = try? JSONDecoder().decode([AppInfo].self, from: savedData) {
-            appBlackList = (decodedApps as [AppInfo]).map({ $0.bundleID })
+            appBlackList = (decodedApps as [AppInfo]).map({ $0.bundleID }).filter({ !$0.isEmpty })
+            pathBlackList = (decodedApps as [AppInfo]).compactMap({ $0.executablePath })
         }
         
         var windows = [SCWindow]()
         windows = content.windows.filter({
             guard let app = $0.owningApplication, let title = $0.title else { return false }
+            if app.bundleIdentifier.isEmpty {
+                // 未打包的程序没有 bundle ID，只保留有应用名的普通窗口，排除 WindowServer 的系统窗口
+                if app.applicationName.isEmpty || $0.windowLayer != 0 { return false }
+                if !pathBlackList.isEmpty,
+                   let path = NSRunningApplication(processIdentifier: app.processID)?.executableURL?.resolvingSymlinksInPath().path,
+                   pathBlackList.contains(path) { return false }
+            }
             return !excludedApps.contains(app.bundleIdentifier)
             && !appBlackList.contains(app.bundleIdentifier)
             && !title.contains("Item-0")
