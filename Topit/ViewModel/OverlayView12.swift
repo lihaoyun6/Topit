@@ -66,10 +66,10 @@ struct OverlayView12: View {
                     )
                     .onTapGesture {
                         if !mouseOverAction {
-                            if let id = window.owningApplication?.bundleIdentifier, let win = nsWindow {
+                            if let pid = window.owningApplication?.processID, let win = nsWindow {
                                 activateWindow(axWindow: axWindow, frame: CGRectTransform(cgRect: win.frame))
                                 NSApp.activate(ignoringOtherApps: true)
-                                bringAppToFront(bundleIdentifier: id)
+                                bringAppToFront(pid: pid)
                                 withAnimation(.easeOut(duration: 0.1)) { opacity = 0 }
                             }
                         }
@@ -163,10 +163,10 @@ struct OverlayView12: View {
         if mouseInWindow {
             if !keepFocus || mouseOverAction { nsWindow?.makeKeyAndOrderFront(self) }
             if overView == mouseInWindow || !mouseOverAction { return }
-            if let id = window.owningApplication?.bundleIdentifier, let win = nsWindow {
+            if let pid = window.owningApplication?.processID, let win = nsWindow {
                 activateWindow(axWindow: axWindow, frame: CGRectTransform(cgRect: win.frame))
                 NSApp.activate(ignoringOtherApps: true)
-                bringAppToFront(bundleIdentifier: id)
+                bringAppToFront(pid: pid)
                 withAnimation(.easeOut(duration: 0.1)) { opacity = 0 }
             }
         } else {

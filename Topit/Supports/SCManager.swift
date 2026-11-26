@@ -145,7 +145,7 @@ class ScreenCaptureManager: NSObject, ObservableObject, SCStreamDelegate, SCStre
 class SCManager {
     static var pinnedWdinwows = [SCWindow]()
     static var availableContent: SCShareableContent?
-    static private let excludedApps = ["", "com.apple.dock", "com.apple.screencaptureui", "com.apple.controlcenter", "com.apple.notificationcenterui", "com.apple.systemuiserver", "com.apple.WindowManager", "dev.mnpn.Azayaka", "com.gaosun.eul", "com.pointum.hazeover", "net.matthewpalmer.Vanilla", "com.dwarvesv.minimalbar", "com.bjango.istatmenus.status", "com.macpaw.CleanMyMac4", "com.lihaoyun6.Topit"]
+    static private let excludedApps = ["com.apple.dock", "com.apple.screencaptureui", "com.apple.controlcenter", "com.apple.notificationcenterui", "com.apple.systemuiserver", "com.apple.WindowManager", "dev.mnpn.Azayaka", "com.gaosun.eul", "com.pointum.hazeover", "net.matthewpalmer.Vanilla", "com.dwarvesv.minimalbar", "com.bjango.istatmenus.status", "com.macpaw.CleanMyMac4", "com.lihaoyun6.Topit"]
     
     static func updateAvailableContentSync() -> SCShareableContent? {
         let semaphore = DispatchSemaphore(value: 0)
@@ -196,6 +196,8 @@ class SCManager {
         var windows = [SCWindow]()
         windows = content.windows.filter({
             guard let app = $0.owningApplication, let title = $0.title else { return false }
+            // 未打包的程序没有 bundle ID，只保留有应用名的普通窗口，排除 WindowServer 的系统窗口
+            if app.bundleIdentifier.isEmpty && (app.applicationName.isEmpty || $0.windowLayer != 0) { return false }
             return !excludedApps.contains(app.bundleIdentifier)
             && !appBlackList.contains(app.bundleIdentifier)
             && !title.contains("Item-0")
