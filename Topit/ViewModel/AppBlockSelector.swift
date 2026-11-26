@@ -25,6 +25,7 @@ struct BundleSelector: View {
                             }
                         }
                     Text(item.displayName).font(.system(size: 12))
+                        .help(item.executablePath ?? item.bundleID)
                 }
             }
             Button(action: {
@@ -46,11 +47,18 @@ struct BundleSelector: View {
                 ud.set(encodedData, forKey: "hiddenApps")
             }
         }
-        .fileImporter(isPresented: $isShowingFilePicker, allowedContentTypes: [.application]) { result in
+        .fileImporter(isPresented: $isShowingFilePicker, allowedContentTypes: [.application, .unixExecutable]) { result in
             do {
-                guard let appID = try Bundle(url: result.get())?.bundleIdentifier else { return }
-                guard let displayName = try Bundle(url: result.get())?.fileName else { return }
-                let app = AppInfo(bundleID: appID, displayName: displayName)
+                let url = try result.get()
+                let bundle = Bundle(url: url)
+                let app: AppInfo
+                if let bundle = bundle, let appID = bundle.bundleIdentifier {
+                    app = AppInfo(bundleID: appID, displayName: bundle.fileName)
+                } else {
+                    // 未打包的程序没有 bundle ID，按可执行文件路径记录
+                    let executable = bundle?.executableURL ?? url
+                    app = AppInfo(bundleID: "", displayName: url.lastPathComponent, executablePath: executable.resolvingSymlinksInPath().path)
+                }
                 if !self.Bundles.contains(app) {
                     withAnimation { Bundles.append(app) }
                 }
@@ -64,6 +72,7 @@ struct BundleSelector: View {
 struct AppInfo: Hashable, Codable {
     let bundleID: String
     let displayName: String
+    var executablePath: String? = nil
 }
 
 extension Bundle {

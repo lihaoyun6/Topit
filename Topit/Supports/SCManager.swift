@@ -188,16 +188,23 @@ class SCManager {
     static func getWindows(noFilter: Bool = false) -> [SCWindow] {
         guard let content = availableContent else { return [] }
         var appBlackList = [String]()
+        var pathBlackList = [String]()
         if let savedData = ud.data(forKey: "hiddenApps"),
            let decodedApps = try? JSONDecoder().decode([AppInfo].self, from: savedData) {
-            appBlackList = (decodedApps as [AppInfo]).map({ $0.bundleID })
+            appBlackList = (decodedApps as [AppInfo]).map({ $0.bundleID }).filter({ !$0.isEmpty })
+            pathBlackList = (decodedApps as [AppInfo]).compactMap({ $0.executablePath })
         }
         
         var windows = [SCWindow]()
         windows = content.windows.filter({
             guard let app = $0.owningApplication, let title = $0.title else { return false }
-            // 未打包的程序没有 bundle ID，只保留有应用名的普通窗口，排除 WindowServer 的系统窗口
-            if app.bundleIdentifier.isEmpty && (app.applicationName.isEmpty || $0.windowLayer != 0) { return false }
+            if app.bundleIdentifier.isEmpty {
+                // 未打包的程序没有 bundle ID，只保留有应用名的普通窗口，排除 WindowServer 的系统窗口
+                if app.applicationName.isEmpty || $0.windowLayer != 0 { return false }
+                if !pathBlackList.isEmpty,
+                   let path = NSRunningApplication(processIdentifier: app.processID)?.executableURL?.resolvingSymlinksInPath().path,
+                   pathBlackList.contains(path) { return false }
+            }
             return !excludedApps.contains(app.bundleIdentifier)
             && !appBlackList.contains(app.bundleIdentifier)
             && !title.contains("Item-0")
