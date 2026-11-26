@@ -310,10 +310,10 @@ struct OverlayViewOpacity: View {
     }
     
     private func activate() -> Bool {
-        if let id = window.owningApplication?.bundleIdentifier, let win = nsWindow {
+        if let pid = window.owningApplication?.processID, let win = nsWindow {
             activateWindow(axWindow: axWindow, frame: CGRectTransform(cgRect: win.frame))
             NSApp.activate(ignoringOtherApps: true)
-            bringAppToFront(bundleIdentifier: id)
+            bringAppToFront(pid: pid)
             return true
         }
         return false
